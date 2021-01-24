@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "apartments")
+@Table(name = "apartment")
 public class ApartmentEntity implements Serializable {
     // not necessary, but preferable
     private static final long serialVersionUID = -8788810915308195856L;
@@ -13,7 +13,7 @@ public class ApartmentEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // This GenerationType indicates that the persistence provider must assign primary keys for the entity using a database identity column.
     // Default AUTO is also ok.
-    private long Id;
+    private long aid;
 
     @ManyToOne
     private UserEntity landlord;
@@ -44,12 +44,12 @@ public class ApartmentEntity implements Serializable {
     @Column(nullable=false)
     private int price;
 
-    public long getId() {
-        return Id;
+    public long getAid() {
+        return aid;
     }
 
-    public void setId(long id) {
-        Id = id;
+    public void setAid(long aid) {
+        this.aid = aid;
     }
 
     public UserEntity getLandlord() {

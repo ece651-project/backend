@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class UserEntity implements Serializable{
     // not necessary, but preferable
     private static final long serialVersionUID = 4315090579219428812L;
@@ -33,12 +33,17 @@ public class UserEntity implements Serializable{
     @Column(nullable=false, unique=true)
     private String encryptedPassword;
 
-    // TODO: list or set?
+    // TODO: list or set? If set, add equals() and hashCode().
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
     private List<ApartmentEntity> ownedApartments = new ArrayList<>();
 
-//    @ManyToMany()
-//    private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
+    // TODO: list or set?
+    // TODO: single-side or double-side relation? Does the apartment need to know its collectors? Curr is single-side.
+    @ManyToMany(fetch = FetchType.EAGER)    // TODO: consider the FetchType
+    @JoinTable(name = "favorite_apartment",
+            joinColumns = {@JoinColumn(name = "uid")},
+            inverseJoinColumns = {@JoinColumn(name = "aid")})
+    private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
 
     public long getId() {
         return Id;
