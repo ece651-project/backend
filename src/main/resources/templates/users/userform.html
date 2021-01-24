@@ -21,7 +21,7 @@
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <form th:object="${user}" th:action="@{/users/}" method="post">
+            <form th:object="${user}" th:action="@{/user/}" method="post">
 
                 <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                     <p>Please Correct Errors Below</p>
@@ -34,13 +34,13 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-12 form-group" th:class="${#fields.hasErrors('userName')}
+                                <div class="col-md-12 form-group" th:class="${#fields.hasErrors('nickname')}
                                 ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
                                     <label>Username:</label>
-                                    <input type="text" class="form-control" th:field="*{userName}" th:errorclass="has-error"/>
-                                    <span class="help-block" th:if="${#fields.hasErrors('userName')}">
+                                    <input type="text" class="form-control" th:field="*{nickname}" th:errorclass="has-error"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('nickname')}">
                                         <ul>
-                                            <li th:each="err : ${#fields.errors('userName')}" th:text="${err}"/>
+                                            <li th:each="err : ${#fields.errors('nickname')}" th:text="${err}"/>
                                         </ul>
                                     </span>
                                 </div>
@@ -65,6 +65,18 @@
                                     <span class="help-block" th:if="${#fields.hasErrors('password')}">
                                         <ul>
                                             <li th:each="err : ${#fields.errors('password')}" th:text="${err}"/>
+                                        </ul>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group" th:class="${#fields.hasErrors('phoneNum')}
+                                ? 'col-md-3 form-group has-error' : 'col-md-3 form-group'">
+                                    <label>Phone Number:</label>
+                                    <input type="text" class="form-control" th:field="*{phoneNum}" th:errorclass="has-error"/>
+                                    <span class="help-block" th:if="${#fields.hasErrors('phoneNum')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('phoneNum')}" th:text="${err}"/>
                                         </ul>
                                     </span>
                                 </div>

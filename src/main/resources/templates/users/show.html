@@ -33,16 +33,24 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <h5>Username:</h5>
+                                <h5>Nickname:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p th:text="${(user.nickname)}">Username here!</p>
+                                <p th:text="${(user.nickname)}">Nickname here!</p>
                             </div>
                             <div class="col-md-3">
                                 <h5>Email:</h5>
                             </div>
                             <div class="col-md-3">
                                 <p th:text="${user.email}">Email here!</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5>Phone number:</h5>
+                            </div>
+                            <div class="col-md-3">
+                                <p th:text="${(user.phoneNum)}">Nickname here!</p>
                             </div>
                         </div>
                     </div>

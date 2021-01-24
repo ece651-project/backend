@@ -18,13 +18,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/*TODO:
+    1. change the html file name to be consistent with frontend
+    2. add update and delete controllers
+*/
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
     private static final String USER_FORM_URL = "users/userform";   // resources/templates/users/userform.html
 
     private final UserService userService;
     private final ModelMapper modelMapper;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -32,17 +38,14 @@ public class UserController {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
-
-
-    @GetMapping("/new")
-    public String newUser(Model model){
+    @GetMapping("/add_user")
+    public String addUser(Model model){
         model.addAttribute("user", new CreateUserRequestModel());
 
         return USER_FORM_URL;
     }
 
-    @PostMapping()
+    @PostMapping()  // TODO: post URL may change to be consistent with frontend
     public String createUser(@Valid @ModelAttribute("user") CreateUserRequestModel createUserRequestModel,
                              BindingResult bindingResult) {
 
@@ -59,7 +62,7 @@ public class UserController {
         UserDto userDto = modelMapper.map(createUserRequestModel, UserDto.class);
         UserDto createdUserDto = userService.createUser(userDto);
 
-        return "redirect:/users/" + createdUserDto.getUid() + "/show";
+        return "redirect:/user/" + createdUserDto.getUid();
     }
 
     // for Postman: could run without frontend
@@ -80,7 +83,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
     }
 
-    @GetMapping("/{userId}/show")
+    @GetMapping("/{userId}")
     public String showById(@PathVariable String userId, Model model) {
 
         model.addAttribute("user", userService.getUserByUserId(userId));
