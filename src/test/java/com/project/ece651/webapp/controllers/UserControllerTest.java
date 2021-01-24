@@ -45,7 +45,8 @@ class UserControllerTest {
 
         when(userService.createUser(any())).thenReturn(userDto);
 
-        String userRequestBody = "{\"userName\":\"aaaaaaaa\",\"email\":\"aaaaaa@163.com\",\"password\":\"11111111\", \"phoneNum\":\"12345678910\"}";
+        // in JSON format
+        String userRequestBody = "{\"nickname\":\"aaaaaaaa\",\"email\":\"aaaaaa@163.com\",\"password\":\"11111111\", \"phoneNum\":\"12345678910\"}";
 
         mockMvc.perform(post("/user/add_user-postman")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -55,5 +56,5 @@ class UserControllerTest {
                 .andReturn().getResponse().getContentAsString();
     }
 
-    // TODO: other tests
+    // TODO: add tests
 }

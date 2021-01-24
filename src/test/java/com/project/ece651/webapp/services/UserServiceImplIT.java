@@ -35,6 +35,7 @@ public class UserServiceImplIT {
         userDto.setNickname("Lee");
         userDto.setEmail("123@gmail.com");
         userDto.setPassword("abcdefgh");
+        userDto.setPhoneNum("1111222233331");
 
         UserDto savedUserDto = userService.createUser(userDto);
 

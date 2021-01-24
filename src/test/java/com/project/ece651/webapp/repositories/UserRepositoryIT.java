@@ -42,6 +42,7 @@ class UserRepositoryIT {
             userEntity.setNickname("David");
             userEntity.setEmail("david@126.com");
             userEntity.setEncryptedPassword("asfasc12c");
+            userEntity.setPhoneNum("1231231231231");
 
             userRepository.save(userEntity);
 

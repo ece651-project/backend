@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
-    // TO-DO: how to include environment in tests?
+    // TODO: how to include environment in tests?
 
     @Mock
     UserRepository userRepository;
@@ -40,6 +40,7 @@ class UserServiceImplTest {
         userDto.setNickname("Tom");
         userDto.setEmail("test@gmail.com");
         userDto.setPassword("asdfghjk");
+        userDto.setPhoneNum("1111222233331");
 
         // when
         UserDto createdUserDto = userService.createUser(userDto);
@@ -48,5 +49,5 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).save(any(UserEntity.class));
     }
 
-    // TODO: other tests
+    // TODO: add tests
 }
