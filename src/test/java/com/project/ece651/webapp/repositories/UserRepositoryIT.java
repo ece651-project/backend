@@ -1,6 +1,6 @@
 package com.project.ece651.webapp.repositories;
 
-import com.project.ece651.webapp.domains.UserEntity;
+import com.project.ece651.webapp.entities.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,22 +38,22 @@ class UserRepositoryIT {
             UserEntity userEntity = new UserEntity();
 
             // id field in auto incremented by DB
-            userEntity.setUserId("12345");
-            userEntity.setUserName("David");
+            userEntity.setUid("12345");
+            userEntity.setNickname("David");
             userEntity.setEmail("david@126.com");
             userEntity.setEncryptedPassword("asfasc12c");
 
             userRepository.save(userEntity);
 
-            return userEntity.getUserId();
+            return userEntity.getUid();
         });
 
         transactionTemplate.execute((ts) -> {
-            UserEntity resultUserEntity = userRepository.findByUserId(userId);
+            UserEntity resultUserEntity = userRepository.findByUid(userId);
 
             assertEquals(1L, resultUserEntity.getId());
-            assertEquals(userId, resultUserEntity.getUserId());
-            assertEquals("David", resultUserEntity.getUserName());
+            assertEquals(userId, resultUserEntity.getUid());
+            assertEquals("David", resultUserEntity.getNickname());
             assertEquals("david@126.com", resultUserEntity.getEmail());
             assertEquals("asfasc12c", resultUserEntity.getEncryptedPassword());
 

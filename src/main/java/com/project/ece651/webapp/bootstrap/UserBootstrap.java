@@ -1,8 +1,5 @@
 package com.project.ece651.webapp.bootstrap;
 
-import com.project.ece651.webapp.domains.ApartmentEntity;
-import com.project.ece651.webapp.domains.UserEntity;
-import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.UserDto;
 import org.slf4j.Logger;
@@ -12,9 +9,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 //@Component
 //@Profile("default")
@@ -78,15 +72,17 @@ public class UserBootstrap implements ApplicationListener<ContextRefreshedEvent>
 
     private void generateInitialUsers() {
         UserDto user1 = new UserDto();
-        user1.setUserName("Li Lei");
+        user1.setNickname("Li Lei");
         user1.setEmail("lilei@gmail.com");
         user1.setPassword("leileili");
+        user1.setPhoneNum("1231231231231");
         userService.createUser(user1);
 
         UserDto user2 = new UserDto();
-        user2.setUserName("Han Meimei");
+        user2.setNickname("Han Meimei");
         user2.setEmail("hanmeimei@gmail.com");
         user2.setPassword("meimeihan");
+        user2.setPhoneNum("4564564564564");
         userService.createUser(user2);
     }
 }

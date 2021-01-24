@@ -1,6 +1,4 @@
-package com.project.ece651.webapp.domains;
-
-import org.springframework.security.core.userdetails.User;
+package com.project.ece651.webapp.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,19 +1,15 @@
 package com.project.ece651.webapp.services;
 
-import com.project.ece651.webapp.domains.UserEntity;
+import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.shared.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -41,7 +37,7 @@ class UserServiceImplTest {
     void createUser() {
         // given
         UserDto userDto = new UserDto();
-        userDto.setUserName("Tom");
+        userDto.setNickname("Tom");
         userDto.setEmail("test@gmail.com");
         userDto.setPassword("asdfghjk");
 

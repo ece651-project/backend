@@ -1,13 +1,12 @@
 package com.project.ece651.webapp.services;
 
-import com.project.ece651.webapp.domains.UserEntity;
+import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.shared.UserDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     public UserDto createUser(UserDto userDetails) {
 
-        userDetails.setUserId(UUID.randomUUID().toString());
+        userDetails.setUid(UUID.randomUUID().toString());
         userDetails.setEncryptedPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -64,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto getUserByUserId(String userId) {
-        UserEntity userEntity = userRepository.findByUserId(userId);
+        UserEntity userEntity = userRepository.findByUid(userId);
         if (userEntity == null) {
             throw new UsernameNotFoundException(userId + ": User not found");
         }

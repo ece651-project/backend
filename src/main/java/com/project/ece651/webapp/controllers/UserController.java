@@ -59,7 +59,7 @@ public class UserController {
         UserDto userDto = modelMapper.map(createUserRequestModel, UserDto.class);
         UserDto createdUserDto = userService.createUser(userDto);
 
-        return "redirect:/users/" + createdUserDto.getUserId() + "/show";
+        return "redirect:/users/" + createdUserDto.getUid() + "/show";
     }
 
     // for Postman: could run without frontend

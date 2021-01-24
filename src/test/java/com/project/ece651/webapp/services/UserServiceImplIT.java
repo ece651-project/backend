@@ -1,6 +1,6 @@
 package com.project.ece651.webapp.services;
 
-import com.project.ece651.webapp.domains.UserEntity;
+import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.shared.UserDto;
 import org.junit.jupiter.api.Test;
@@ -28,18 +28,18 @@ public class UserServiceImplIT {
         // UserBootstrap.java is invoked
         Iterable<UserEntity> users = userRepository.findAll();
         for (UserEntity userEntity: users) {
-            System.out.println(userEntity.getUserName());   // Li Lei; Han Meimei
+            System.out.println(userEntity.getNickname());   // Li Lei; Han Meimei
         }
 
         UserDto userDto = new UserDto();
-        userDto.setUserName("Lee");
+        userDto.setNickname("Lee");
         userDto.setEmail("123@gmail.com");
         userDto.setPassword("abcdefgh");
 
         UserDto savedUserDto = userService.createUser(userDto);
 
-        UserDto resultUserDto = userService.getUserByUserId(savedUserDto.getUserId());
-        assertEquals("Lee", resultUserDto.getUserName());
+        UserDto resultUserDto = userService.getUserByUserId(savedUserDto.getUid());
+        assertEquals("Lee", resultUserDto.getNickname());
         assertEquals("123@gmail.com", resultUserDto.getEmail());
         // resultUserDto.getPassword() will return encrypted password
         // assertEquals("abcdefgh", resultUserDto.getPassword());

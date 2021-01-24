@@ -1,16 +1,17 @@
 package com.project.ece651.webapp.models;
 
 public class CreateUserResponseModel {
-    private String userName;
+    private String uid;
     private String email;
-    private String userId;
+    private String nickname;
+    private String phoneNum;
 
-    public String getUserName() {
-        return userName;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -21,11 +22,19 @@ public class CreateUserResponseModel {
         this.email = email;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 }

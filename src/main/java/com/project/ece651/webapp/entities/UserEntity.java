@@ -1,4 +1,4 @@
-package com.project.ece651.webapp.domains;
+package com.project.ece651.webapp.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,24 +18,27 @@ public class UserEntity implements Serializable{
     private long Id;
 
     @Column(nullable=false, unique=true)
-    private String userId;
+    private String uid;
 
     @Column(nullable = false, length = 50, unique = true)
-    private String userName;
-
-    @Column(nullable = false, length = 120, unique = true)
     private String email;
+
+    @Column(nullable = false, length = 50, unique = true)
+    private String nickname;
+
+    // TODO: maybe another specialized constraint for phone number
+    @Column(nullable=false)
+    private String phoneNum;
 
     @Column(nullable=false, unique=true)
     private String encryptedPassword;
 
-    // TODO: phoneNumber
-    // TODO: @Lob images
-    // TODO: fields for "add to favorites"
-
-    // TODO: List<ApartmentEntity> (or Set): one-to-many mapping
+    // TODO: list or set?
     @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
-    private List<ApartmentEntity> apartments = new ArrayList<>();
+    private List<ApartmentEntity> ownedApartments = new ArrayList<>();
+
+//    @ManyToMany()
+//    private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
 
     public long getId() {
         return Id;
@@ -45,20 +48,12 @@ public class UserEntity implements Serializable{
         Id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -69,6 +64,22 @@ public class UserEntity implements Serializable{
         this.email = email;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
     public String getEncryptedPassword() {
         return encryptedPassword;
     }
@@ -77,12 +88,12 @@ public class UserEntity implements Serializable{
         this.encryptedPassword = encryptedPassword;
     }
 
-    public List<ApartmentEntity> getApartments() {
-        return apartments;
+    public List<ApartmentEntity> getOwnedApartments() {
+        return ownedApartments;
     }
 
-    public UserEntity addApartment(ApartmentEntity apartmentEntity) {
-        this.apartments.add(apartmentEntity);
+    public UserEntity addOwnedApartments(ApartmentEntity apartmentEntity) {
+        this.ownedApartments.add(apartmentEntity);
         apartmentEntity.setLandlord(this);
         return this;
     }

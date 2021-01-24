@@ -9,12 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest {
@@ -39,7 +37,7 @@ class UserControllerTest {
     @Test
     void createUserPostman() throws Exception {
         UserDto userDto = new UserDto();
-        userDto.setUserName("Jack");
+        userDto.setNickname("Jack");
 
         when(userService.createUser(any())).thenReturn(userDto);
 

@@ -1,35 +1,24 @@
 package com.project.ece651.webapp.shared;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.io.Serializable;
 
 // DTO: data transfer object
 public class UserDto implements Serializable {
     private static final long serialVersionUID = 3031456972238819242L;
 
-    private String userId;
-    private String userName;
+    private String uid;
     private String email;
+    private String nickname;
+    private String phoneNum;
     private String password;
     private String encryptedPassword;
 
-    public String getUserId() {
-        return userId;
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -38,6 +27,22 @@ public class UserDto implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 
     public String getPassword() {
