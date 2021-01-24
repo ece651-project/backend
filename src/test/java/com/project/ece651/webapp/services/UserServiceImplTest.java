@@ -30,7 +30,7 @@ class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
-        userService = new UserServiceImpl(userRepository, new BCryptPasswordEncoder());
+        userService = new UserServiceImpl(userRepository, new BCryptPasswordEncoder(), modelMapper);
     }
 
     @Test

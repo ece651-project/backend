@@ -21,21 +21,23 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ModelMapper modelMapper;
     // private final Environment environment;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.modelMapper = modelMapper;
     }
 
     public UserDto createUser(UserDto userDetails) {
 
         userDetails.setUid(UUID.randomUUID().toString());
         userDetails.setEncryptedPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//        ModelMapper modelMapper = new ModelMapper();
+//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         UserEntity userEntity = modelMapper.map(userDetails, UserEntity.class);
 
@@ -67,7 +69,9 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) {
             throw new UsernameNotFoundException(userId + ": User not found");
         }
-        return new ModelMapper().map(userEntity, UserDto.class);
+//        ModelMapper modelMapper = new ModelMapper();
+//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        return modelMapper.map(userEntity, UserDto.class);
     }
 
     public UserDto getUserByEmail(String email) {
@@ -75,6 +79,8 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) {
             throw new UsernameNotFoundException(email + ": User not found");
         }
-        return new ModelMapper().map(userEntity, UserDto.class);
+//        ModelMapper modelMapper = new ModelMapper();
+//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        return modelMapper.map(userEntity, UserDto.class);
     }
 }

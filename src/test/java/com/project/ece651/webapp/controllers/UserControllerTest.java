@@ -5,6 +5,8 @@ import com.project.ece651.webapp.shared.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,7 +30,9 @@ class UserControllerTest {
     void setUp() {
         userService = mock(UserService.class);
 
-        controller = new UserController(userService);
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        controller = new UserController(userService, modelMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -41,9 +45,9 @@ class UserControllerTest {
 
         when(userService.createUser(any())).thenReturn(userDto);
 
-        String userRequestBody = "{\"userName\":\"aaaaaaaa\",\"email\":\"aaaaaa@163.com\",\"password\":\"11111111\"}";
+        String userRequestBody = "{\"userName\":\"aaaaaaaa\",\"email\":\"aaaaaa@163.com\",\"password\":\"11111111\", \"phoneNum\":\"12345678910\"}";
 
-        mockMvc.perform(post("/users/create-postman")
+        mockMvc.perform(post("/user/add_user-postman")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userRequestBody)
         )

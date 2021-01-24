@@ -21,6 +21,7 @@ import javax.validation.Valid;
 /*TODO:
     1. change the html file name to be consistent with frontend
     2. add update and delete controllers
+    3. login
 */
 @Controller
 @RequestMapping("/user")
@@ -32,10 +33,11 @@ public class UserController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
-        modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//        modelMapper = new ModelMapper();
+//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/add_user")
@@ -66,7 +68,7 @@ public class UserController {
     }
 
     // for Postman: could run without frontend
-    @PostMapping(value = "/create-postman",
+    @PostMapping(value = "/add_user-postman",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
@@ -90,9 +92,4 @@ public class UserController {
 
         return "users/show";
     }
-
-//    TODO:
-//    1. login
-//    2. update
-//    3. delete
 }
