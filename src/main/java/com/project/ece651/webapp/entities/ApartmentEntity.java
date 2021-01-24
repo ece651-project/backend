@@ -15,26 +15,34 @@ public class ApartmentEntity implements Serializable {
     // Default AUTO is also ok.
     private long Id;
 
-    @Column(nullable=false, unique=true)
-    private String apartmentId;
+    @ManyToOne
+    private UserEntity landlord;
+
+    @Enumerated(value = EnumType.STRING)
+    private Type type;
 
     @Column(nullable=false)
-    private int price;
+    private String address;
 
-    @Column(nullable=false)
-    private String location;
+    /* TODO: add
+        1. upload date
+        2. Start month
+        3. End month
+     */
 
     @Column(nullable=false)
     private String description;
 
-    @ManyToOne
-    private UserEntity landlord;
+    /* TODO: Add images
+        add ImageEntity. @OneToMany
+        List<ImageEntity> images
+        ImageEntity:
+            @Lob    //BLOB field inside db
+            private Byte[] image;
+     */
 
-    @Lob    //BLOB field inside db
-    private Byte[] image;
-
-//    TODO:
-//    1. fields: rent period, @Log images, price and payment cycle, notes, ...
+    @Column(nullable=false)
+    private int price;
 
     public long getId() {
         return Id;
@@ -42,38 +50,6 @@ public class ApartmentEntity implements Serializable {
 
     public void setId(long id) {
         Id = id;
-    }
-
-    public String getApartmentId() {
-        return apartmentId;
-    }
-
-    public void setApartmentId(String apartmentId) {
-        this.apartmentId = apartmentId;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public UserEntity getLandlord() {
@@ -84,11 +60,35 @@ public class ApartmentEntity implements Serializable {
         this.landlord = landlord;
     }
 
-    public Byte[] getImage() {
-        return image;
+    public Type getType() {
+        return type;
     }
 
-    public void setImage(Byte[] image) {
-        this.image = image;
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }

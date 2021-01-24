@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByUserId(String userId) {
         UserEntity userEntity = userRepository.findByUid(userId);
         if (userEntity == null) {
-            throw new UsernameNotFoundException(userId + ": User not found");
+            return null;
         }
 //        ModelMapper modelMapper = new ModelMapper();
 //        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -77,10 +77,12 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email) {
         UserEntity userEntity = userRepository.findByEmail(email);
         if (userEntity == null) {
-            throw new UsernameNotFoundException(email + ": User not found");
+            return null;
         }
 //        ModelMapper modelMapper = new ModelMapper();
 //        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper.map(userEntity, UserDto.class);
     }
+
+    // TODO: add methods
 }

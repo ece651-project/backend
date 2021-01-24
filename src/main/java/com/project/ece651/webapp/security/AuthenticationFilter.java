@@ -16,5 +16,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         super.setAuthenticationManager(authenticationManager);
     }
 
-    // TO-DO: JWT authentication
+    /* TODO:
+        1. JWT authentication
+        2. add AuthorizationFilter
+     */
 }
