@@ -3,6 +3,7 @@ package com.project.ece651.webapp.repositories;
 import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.Type;
 import com.project.ece651.webapp.entities.UserEntity;
+import com.project.ece651.webapp.utils.ApartmentTestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,12 +54,8 @@ class ApartmentRepositoryIT {
     void testFindByAid() {
         Long aid = transactionTemplate.execute((ts) -> {
             UserEntity user = userRepository.findByUid(DEFAULT_USER_ID);
-            ApartmentEntity apartmentEntity = new ApartmentEntity();
-            apartmentEntity.setLandlord(user);
-            apartmentEntity.setType(Type.APARTMENT);
-            apartmentEntity.setAddress("Address for testing");
-            apartmentEntity.setDescription("Description for testing");
-            apartmentEntity.setPrice(12345);
+            ApartmentEntity apartmentEntity = ApartmentTestUtils.createDefaultApartment(user);
+            user.addOwnedApartments(apartmentEntity);
             apartmentRepository.save(apartmentEntity);
             return apartmentEntity.getAid();
         });
@@ -66,10 +63,10 @@ class ApartmentRepositoryIT {
         transactionTemplate.execute((ts) -> {
             ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
             assertEquals(aid, apartmentEntity.getAid());
-            assertEquals(Type.APARTMENT, apartmentEntity.getType());
-            assertEquals("Address for testing", apartmentEntity.getAddress());
-            assertEquals("Description for testing", apartmentEntity.getDescription());
-            assertEquals(12345, apartmentEntity.getPrice());
+            assertEquals(ApartmentTestUtils.DEFAULT_APARTMENT_TYPE, apartmentEntity.getType());
+            assertEquals(ApartmentTestUtils.DEFAULT_APARTMENT_ADDRESS, apartmentEntity.getAddress());
+            assertEquals(ApartmentTestUtils.DEFAULT_APARTMENT_DESC, apartmentEntity.getDescription());
+            assertEquals(ApartmentTestUtils.DEFAULT_APARTMENT_PRICE, apartmentEntity.getPrice());
             return null;
         });
     }
@@ -84,18 +81,12 @@ class ApartmentRepositoryIT {
             Iterable<UserEntity> users = userRepository.findAll();
             int userCnt = 0;
             for (UserEntity user : users) {
-                ApartmentEntity apartment = new ApartmentEntity();
-                apartment.setLandlord(user);
-                apartment.setType(Type.APARTMENT);
-                apartment.setAddress("Empty address");
-                apartment.setDescription("Empty description");
-                apartmentRepository.save(apartment);
+                // each user insert one apartment
+                ApartmentEntity apartmentEntity = ApartmentTestUtils.createDefaultApartment(user);
+                user.addOwnedApartments(apartmentEntity);
                 userCnt++;
             }
-            for (ApartmentEntity apartment : apartmentRepository.findAll()) {
-                Timestamp timestamp = apartment.getUploadTime();
-                System.out.println(apartment);
-            }
+            // the new number of apart,ents after insertion - the number of users - the previous number of apartments
             return apartmentRepository.findAll().size() - userCnt - beforeApartmentNum;
         });
         // the number diff should be 0

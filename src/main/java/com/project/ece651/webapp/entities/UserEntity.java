@@ -102,4 +102,5 @@ public class UserEntity implements Serializable{
         apartmentEntity.setLandlord(this);
         return this;
     }
+
 }
