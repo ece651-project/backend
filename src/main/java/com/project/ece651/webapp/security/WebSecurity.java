@@ -33,16 +33,25 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         // have to add this to connect to h2-console
         http.headers().frameOptions().disable();
 
-//        // TODO: temporary. edit to allow paths only after login
-//        http.authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/h2-console").permitAll()
-//                .antMatchers(HttpMethod.POST, "/users").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .addFilter(getAuthenticationFilter());
+        // TODO: temporary. need to edit antMatchers rules
+        // https://stackoverflow.com/questions/24696717/spring-security-permitall-not-allowing-anonymous-access
+        http
+                .authorizeRequests()
+                    .antMatchers("/").permitAll()
+                    .antMatchers("/h2-console").permitAll()
+                    .antMatchers("/user/add_user").permitAll()
+                    .anyRequest().authenticated() // for other URL: if not login, redirect to login
+                    .and()
+//                    .addFilter(getAuthenticationFilter()) // for JWT token, need to edit AuthenticationFilter.java if use JWT
+                .formLogin(form -> form
+                        .loginPage("/user/login")
+                        .permitAll());
+//                .logout()
+//                .logoutUrl("/user/logout")
+//                .logoutSuccessUrl("/user/login");
     }
 
+    // not used now, for JWT
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(userService, environment, authenticationManager());
 //        authenticationFilter.setAuthenticationManager(authenticationManager());
