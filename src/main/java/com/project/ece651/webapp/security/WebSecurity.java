@@ -33,6 +33,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         // have to add this to connect to h2-console
         http.headers().frameOptions().disable();
 
+
+        // https://stackoverflow.com/questions/24696717/spring-security-permitall-not-allowing-anonymous-access
+        http
+                .authorizeRequests()
+                    .anyRequest()
+                    .authenticated()
+                    .and()
+                .formLogin(form -> form
+                        .loginPage("/user/login")
+                        .permitAll());
+
 //        // TODO: temporary. edit to allow paths only after login
 //        http.authorizeRequests()
 //                .antMatchers("/").permitAll()

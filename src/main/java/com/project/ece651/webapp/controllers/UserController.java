@@ -43,6 +43,11 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     /* could use createUserRequestModel as RequestBody
        if we need backend to validate input data:
        use @Valid and BindingResult
