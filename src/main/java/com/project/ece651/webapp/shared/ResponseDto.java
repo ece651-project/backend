@@ -2,8 +2,9 @@ package com.project.ece651.webapp.shared;
 
 import java.io.Serializable;
 
-// the data transfer object that is empty (only contains whether the request succeed and the response message)
-public class EmptyDto implements Serializable {
+// the basic data transfer object that  contains whether the request succeed and the response message
+// used as response
+public class ResponseDto implements Serializable {
     private static final long serialVersionUID = 4897972238819242L;
     private boolean success = true;
     private String responseMsg;

@@ -6,12 +6,9 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 // data transfer object that contains all information to be conveyed about a typical apartment entity
-// plus an error message (will be useful when the query fails)
-// may potentially add a response code in the future
-public class ApartmentDto implements Serializable {
+// extend ResponseDto to support an error message (will be useful when the query fails)
+public class ApartmentDto extends ResponseDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
-    private boolean success = true;
-    private String responseMsg;
     private long aid;
     private String landlordId;
     private Type type;
@@ -21,14 +18,6 @@ public class ApartmentDto implements Serializable {
     private Date endMonth;
     private String description;
     private int price;
-
-    public String getResponseMsg() {
-        return responseMsg;
-    }
-
-    public void setResponseMsg(String responseMsg) {
-        this.responseMsg = responseMsg;
-    }
 
     public long getAid() {
         return aid;
@@ -102,11 +91,4 @@ public class ApartmentDto implements Serializable {
         this.price = price;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
 }

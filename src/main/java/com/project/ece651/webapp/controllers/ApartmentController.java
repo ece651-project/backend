@@ -5,11 +5,15 @@ package com.project.ece651.webapp.controllers;
         import com.project.ece651.webapp.repositories.ApartmentRepository;
         import com.project.ece651.webapp.repositories.UserRepository;
         import com.project.ece651.webapp.shared.ApartmentDto;
-        import com.project.ece651.webapp.shared.EmptyDto;
+        import com.project.ece651.webapp.shared.ApartmentLstDto;
+        import com.project.ece651.webapp.shared.ResponseDto;
         import com.project.ece651.webapp.utils.ApartmentUtils;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.http.HttpStatus;
         import org.springframework.web.bind.annotation.*;
+
+        import java.util.ArrayList;
+        import java.util.List;
 
 
 @RestController
@@ -22,10 +26,10 @@ public class ApartmentController {
 
     @PostMapping("/add_apt")
     @ResponseStatus(HttpStatus.CREATED)
-    public EmptyDto createApartment(@RequestBody ApartmentDto apartmentDto) {
+    public ResponseDto createApartment(@RequestBody ApartmentDto apartmentDto) {
         // sample url localhost:8080/apt/add_apt
         // add one new apartment according to the given apartment information
-        EmptyDto response = new EmptyDto();
+        ResponseDto response = new ResponseDto();
         // check whether the landlord is in the database
         UserEntity userEntity = userRepository.findByUid(apartmentDto.getLandlordId());
         if (userEntity != null) {
@@ -43,12 +47,34 @@ public class ApartmentController {
         return response;
     }
 
+    @PostMapping("/update_apt/{aid}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseDto updateApartment(@PathVariable long aid, @RequestBody ApartmentDto apartmentDto) {
+        // sample url localhost:8080/apt/update_apt/1
+        // add one new apartment according to the given apartment information
+        ResponseDto response = new ResponseDto();
+        // check whether the landlord is in the database
+        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+        if (apartmentEntity != null) {
+            // update the apartment and persist to database
+            ApartmentUtils.apartmentDtoToEntity(apartmentDto, apartmentEntity);
+            apartmentRepository.save(apartmentEntity);
+            response.setSuccess(true);
+        }
+        else {
+            // apartment not in the database case
+            response.setSuccess(false);
+            response.setResponseMsg("Apartment not in database!");
+        }
+        return response;
+    }
+
     @PostMapping("/delete_apt/{aid}")
     @ResponseStatus(HttpStatus.OK)
-    public EmptyDto deleteApartment(@PathVariable("aid") long aid) {
+    public ResponseDto deleteApartment(@PathVariable long aid) {
         // sample url localhost:8080/apt/delete_apt/1
         // add one new apartment according to the given apartment information
-        EmptyDto response = new EmptyDto();
+        ResponseDto response = new ResponseDto();
         // check whether the apartment is in the database
         ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
         if (apartmentEntity != null) {
@@ -66,6 +92,21 @@ public class ApartmentController {
             response.setResponseMsg("Apartment not in database!");
         }
         return response;
+    }
+
+    @GetMapping("/get_all")
+    @ResponseStatus(HttpStatus.OK)
+    public ApartmentLstDto getAllApartments() {
+        // sample url localhost:8080/apt/get_all
+        ApartmentLstDto apartmentLstDto = new ApartmentLstDto();
+        List<ApartmentEntity> apartmentEntities = apartmentRepository.findAll();
+        List<ApartmentDto> apartmentDtos = new ArrayList<>();
+        for (ApartmentEntity apartmentEntity : apartmentEntities) {
+            apartmentDtos.add(ApartmentUtils.apartmentEntityToDto(apartmentEntity));
+        }
+        apartmentLstDto.setApartmentDtos(apartmentDtos);
+        apartmentLstDto.setSuccess(true);
+        return apartmentLstDto;
     }
 
     @GetMapping("/get_apt/{aid}")
