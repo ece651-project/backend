@@ -98,4 +98,39 @@ class ApartmentRepositoryIT {
     }
 
     // TODO: add tests
+    @Test
+    void testFindAll() {
+        // Two apartment/house info
+        String a1_address = "a1 address";
+        Timestamp a1_uploadTime = new Timestamp(999999998);
+        String a1_desc = "a1 description";
+        int a1_price = 11111;
+
+        String h1_address = "h1 address";
+        Timestamp h1_uploadTime = new Timestamp(999999997);
+        String h1_desc = "h1 description";
+        int h1_price = 22222;
+
+        // Create Apartment/house
+        ApartmentEntity a1 = new ApartmentEntity();
+        a1.setAddress(a1_address);
+        a1.setUploadTime(a1_uploadTime);
+        a1.setDescription(a1_desc);
+        a1.setPrice(a1_price);
+
+        ApartmentEntity h1 = new ApartmentEntity();
+        h1.setAddress(h1_address);
+        h1.setUploadTime(h1_uploadTime);
+        h1.setDescription(h1_desc);
+        h1.setPrice(h1_price);
+
+        // Add apartments
+        apartmentRepository.save(a1);
+        apartmentRepository.save(h1);
+
+        List<ApartmentEntity> apartments = apartmentRepository.findAll();
+
+        assertEquals(apartments.size(), 2);
+        assertNotEquals(apartments.size(), 3);
+    }
 }
