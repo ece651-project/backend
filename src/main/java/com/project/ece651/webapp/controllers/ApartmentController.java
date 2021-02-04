@@ -5,6 +5,7 @@ package com.project.ece651.webapp.controllers;
         import com.project.ece651.webapp.repositories.ApartmentRepository;
         import com.project.ece651.webapp.repositories.UserRepository;
         import com.project.ece651.webapp.shared.ApartmentDto;
+        import com.project.ece651.webapp.shared.EmptyDto;
         import com.project.ece651.webapp.utils.ApartmentUtils;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.http.HttpStatus;
@@ -18,11 +19,13 @@ public class ApartmentController {
     private ApartmentRepository apartmentRepository;
     @Autowired
     private UserRepository userRepository;
+
     @PostMapping("/add_apt")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean createApartment(@RequestBody ApartmentDto apartmentDto) {
+    public EmptyDto createApartment(@RequestBody ApartmentDto apartmentDto) {
         // sample url localhost:8080/apt/add_apt
         // add one new apartment according to the given apartment information
+        EmptyDto response = new EmptyDto();
         // check whether the landlord is in the database
         UserEntity userEntity = userRepository.findByUid(apartmentDto.getLandlordId());
         if (userEntity != null) {
@@ -31,9 +34,38 @@ public class ApartmentController {
             // add the apartment into those own by the user entity
             userEntity.addOwnedApartments(apartmentEntity);
             userRepository.save(userEntity);
-            return true;
+            response.setSuccess(true);
         }
-        return false;
+        else {
+            response.setSuccess(false);
+            response.setResponseMsg("Landlord of the apartment does not exist!");
+        }
+        return response;
+    }
+
+    @PostMapping("/delete_apt/{aid}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmptyDto deleteApartment(@PathVariable("aid") long aid) {
+        // sample url localhost:8080/apt/delete_apt/1
+        // add one new apartment according to the given apartment information
+        EmptyDto response = new EmptyDto();
+        // check whether the apartment is in the database
+        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+        if (apartmentEntity != null) {
+            UserEntity landlord = apartmentEntity.getLandlord();
+            landlord.getOwnedApartments().remove(apartmentEntity);
+            userRepository.save(landlord);
+            // still need to delete the apartment from its repository
+            // may do research on JPA to avoid that
+            apartmentRepository.delete(apartmentEntity);
+            response.setSuccess(true);
+        }
+        else {
+            // apartment not in the database case
+            response.setSuccess(false);
+            response.setResponseMsg("Apartment not in database!");
+        }
+        return response;
     }
 
     @GetMapping("/get_apt/{aid}")
