@@ -10,7 +10,8 @@ import java.sql.Timestamp;
 // may potentially add a response code in the future
 public class ApartmentDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
-    private String responseMsg = "Normal response msg";
+    private boolean success;
+    private String responseMsg;
     private long aid;
     private String landlordId;
     private Type type;
@@ -99,5 +100,13 @@ public class ApartmentDto implements Serializable {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }
