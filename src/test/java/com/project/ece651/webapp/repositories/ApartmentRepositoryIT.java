@@ -55,9 +55,12 @@ class ApartmentRepositoryIT {
         Long aid = transactionTemplate.execute((ts) -> {
             UserEntity user = userRepository.findByUid(DEFAULT_USER_ID);
             ApartmentEntity apartmentEntity = ApartmentTestUtils.createDefaultApartment(user);
+            // add create one default apartment to be owned by the user
+            // and save them to the database
             user.addOwnedApartments(apartmentEntity);
-            apartmentRepository.save(apartmentEntity);
-            return apartmentEntity.getAid();
+            userRepository.save(user);
+            List <ApartmentEntity> apartmentEntities = user.getOwnedApartments();
+            return apartmentEntities.get(apartmentEntities.size() - 1).getAid();
         });
 
         transactionTemplate.execute((ts) -> {
@@ -84,6 +87,7 @@ class ApartmentRepositoryIT {
                 // each user insert one apartment
                 ApartmentEntity apartmentEntity = ApartmentTestUtils.createDefaultApartment(user);
                 user.addOwnedApartments(apartmentEntity);
+                userRepository.save(user);
                 userCnt++;
             }
             // the new number of apart,ents after insertion - the number of users - the previous number of apartments
