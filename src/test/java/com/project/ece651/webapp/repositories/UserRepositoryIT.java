@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -63,4 +65,101 @@ class UserRepositoryIT {
     }
 
     // TODO: add tests
+    @Test
+    void testAddUser() {
+        // User info
+        String uid = "00000";
+        String email = "tempUser@125.com";
+        String nickname = "tempUserNickname";
+        String encryptedPassword = "thisIsEncrypted";
+        String phoneNum = "8008208820";
+
+        // Add one User
+        Iterable<UserEntity> userEntities = transactionTemplate.execute((ts) -> {
+            UserEntity tempUser = new UserEntity();
+            tempUser.setUid(uid);
+            tempUser.setEmail(email);
+            tempUser.setNickname(nickname);
+            tempUser.setEncryptedPassword(encryptedPassword);
+            tempUser.setPhoneNum(phoneNum);
+            userRepository.save(tempUser);
+
+            return userRepository.findAll();
+        });
+
+        // Find the number of the users and the last user
+        int userNum = 0;
+        UserEntity lastUser = null;
+        Iterator<UserEntity> iterator = userEntities.iterator();
+        while (iterator.hasNext()) {
+            userNum++;/**/
+            lastUser = iterator.next();
+        }
+
+        // Test
+        assertEquals(userNum, 1);
+        assertEquals(lastUser.getUid(), uid);
+        assertEquals(lastUser.getEmail(), email);
+        assertEquals(lastUser.getNickname(), nickname);
+        assertEquals(lastUser.getEncryptedPassword(), encryptedPassword);
+        assertEquals(lastUser.getPhoneNum(), phoneNum);
+    }
+
+    @Test
+    void testFindByEmail() {
+        // User info
+        String uid = "00000";
+        String email = "tempUser@125.com";
+        String nickname = "tempUserNickname";
+        String encryptedPassword = "thisIsEncrypted";
+        String phoneNum = "8008208820";
+
+        // Create user
+        UserEntity tempUser = new UserEntity();
+        tempUser.setUid(uid);
+        tempUser.setEmail(email);
+        tempUser.setNickname(nickname);
+        tempUser.setEncryptedPassword(encryptedPassword);
+        tempUser.setPhoneNum(phoneNum);
+
+        // Add one User
+        userRepository.save(tempUser);
+
+        // Find by email
+        UserEntity userFound = userRepository.findByEmail(email);
+        UserEntity userNotFound = userRepository.findByEmail("fakeEmail");
+
+        // Check correct
+        assertEquals(userFound, tempUser);
+        assertNull(userNotFound);
+    }
+
+    @Test
+    void testFindByNickName() {
+        // User info
+        String uid = "00000";
+        String email = "tempUser@125.com";
+        String nickname = "tempUserNickname";
+        String encryptedPassword = "thisIsEncrypted";
+        String phoneNum = "8008208820";
+
+        // Create user
+        UserEntity tempUser = new UserEntity();
+        tempUser.setUid(uid);
+        tempUser.setEmail(email);
+        tempUser.setNickname(nickname);
+        tempUser.setEncryptedPassword(encryptedPassword);
+        tempUser.setPhoneNum(phoneNum);
+
+        // Add one User
+        userRepository.save(tempUser);
+
+        // Find by nickname
+        UserEntity userFound = userRepository.findByNickname(nickname);
+        UserEntity userNotFound = userRepository.findByNickname("fakeNickname");
+
+        // Check correct
+        assertEquals(userFound, tempUser);
+        assertNull(userNotFound);
+    }
 }
