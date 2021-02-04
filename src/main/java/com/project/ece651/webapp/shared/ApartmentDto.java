@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 // may potentially add a response code in the future
 public class ApartmentDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
-    private String responseMsg = "Empty response msg";
+    private String responseMsg = "Normal response msg";
     private long aid;
     private String landlordId;
     private Type type;

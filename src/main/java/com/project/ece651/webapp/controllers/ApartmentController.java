@@ -6,9 +6,13 @@ import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.ApartmentRepository;
 import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.shared.ApartmentDto;
+import com.project.ece651.webapp.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Date;
+import java.util.Calendar;
 
 @RestController
 @RequestMapping("/apt")
@@ -33,34 +37,34 @@ public class ApartmentController {
             // add the apartment into those own by the user entity
             userEntity.addOwnedApartments(apartmentEntity);
             userRepository.save(userEntity);
-//            // save the apartment to its table
-//            apartmentRepository.save(apartmentEntity);
             return true;
         }
         return false;
-
-
-        // create an apartment entity based on the given apartment dto
-//        ApartmentEntity apartmentEntity = new ApartmentEntity();
-//        apartmentEntity.setType(apartmentDto.getType());
-//        apartmentEntity.setAddress(apartmentDto.getAddress());
-//        apartmentEntity.setDescription(apartmentDto.getDescription());
-//        apartmentEntity.setPrice(apartmentDto.getPrice());
-//        UserEntity userEntity = userRepository.findByUid(apartmentDto.getLandlordId());
-//        userEntity.addOwnedApartments(apartmentEntity);
     }
 
     @GetMapping("/get_apt/{aid}")
     @ResponseStatus(HttpStatus.OK)
     public ApartmentDto getApartment(@PathVariable long aid) {
-        // sample url localhost:8080/apt/get_apt/12345
-        // generate a sample apartment and return
+        // sample url localhost:8080/apt/get_apt/1
         ApartmentDto apartmentDto = new ApartmentDto();
-        apartmentDto.setLandlordId("e7fa3740-05ec-4653-8d64-be0f435fbe2a");
-        apartmentDto.setType(Type.APARTMENT);
-        apartmentDto.setAddress("Sample address");
-        apartmentDto.setDescription("Sample desc");
-        apartmentDto.setPrice(12345);
+        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+        if (apartmentEntity == null) {
+            // apartment not exist case
+            // set the response msg to reflect this for now
+            apartmentDto.setResponseMsg("Apartment not in database！");
+        }
+        else {
+            // apartment in database case
+            apartmentDto.setAid(apartmentEntity.getAid());
+            apartmentDto.setLandlordId(apartmentEntity.getLandlord().getUid());
+            apartmentDto.setType(apartmentEntity.getType());
+            apartmentDto.setAddress(apartmentEntity.getAddress());
+            apartmentDto.setUploadTime(apartmentEntity.getUploadTime());
+            apartmentDto.setStartMonth(apartmentEntity.getStartMonth());
+            apartmentDto.setEndMonth(apartmentEntity.getEndMonth());
+            apartmentDto.setDescription(apartmentEntity.getDescription());
+            apartmentDto.setPrice(apartmentEntity.getPrice());
+        }
         return apartmentDto;
     }
 }
