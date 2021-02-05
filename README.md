@@ -8,35 +8,65 @@
 
 application URL - http://localhost:8080
 
-
-
-##### h2 in-memory database
+### h2 in-memory database
 
 http://localhost:8080/h2-console
 JDBC url - jdbc:h2:mem:testdb
 username and password is default
 
-##### Create a new user:
+### APIs
+
+#### 1) User
+
+##### create user:
 
 http://localhost:8080/user/add_user
 
-##### Show a user:
+##### get user:
 
-http://localhost:8080/user/{userId}
-userId can be found in h2 DB
+http://localhost:8080/user/get_user/{uid}
+uid can be found in h2 DB
 
+##### update user:
 
+http://localhost:8080/user/update_user
+
+##### delete user:
+
+http://localhost:8080/user/delete_user/{uid}
+
+##### login:
+
+http://localhost:8080/user/login
+
+#### 2) Apartment
 
 ## 2 Implementation
 
 1) UserService extends UserDetailsService for authentication (password encryption...)
 	If you create a new user, then you can see the effect in h2 (only encrypted password).
 2) There is something wrong with login and authentication, so I annotated related code. And code in form-login, form-login-try also have problems.
-3) For the frontend (with Thymeleaf): somehow the application could not load bootstrap resources, so the page has no style. But preloading html files will include style. 
+
 
 
 
 ## 3 Configuration
+
+#### Centralized Config Classes
+
+under config package
+
+##### 1) Jackson config: 
+
+for JSON mapper
+
+##### 2) CORS config:
+
+reference: https://spring.io/guides/gs/rest-service-cors/
+
+
+
+#### Project Configuration
 
 https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config
 
