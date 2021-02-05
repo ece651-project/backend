@@ -1,25 +1,18 @@
 package com.project.ece651.webapp.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.project.ece651.webapp.models.CreateUserRequestModel;
-import com.project.ece651.webapp.models.CreateUserResponseModel;
-import com.project.ece651.webapp.models.ErrorResponse;
+import com.project.ece651.webapp.entities.UserEntity;
+import com.project.ece651.webapp.models.MsgResponse;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.UserDto;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /*TODO:
     1. change the html file name to be consistent with frontend
@@ -48,10 +41,7 @@ public class UserController {
         return "login";
     }
 
-    /* could use createUserRequestModel as RequestBody
-       if we need backend to validate input data:
-       use @Valid and BindingResult
-     */
+    // @JsonView(UserDto.AddView.class) // does not work
     @PostMapping(value = "/add_user",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -60,7 +50,11 @@ public class UserController {
         try {
             UserDto userDto = jsonMapper.readValue(userJson, UserDto.class);
             UserDto createdUserDto = userService.createUser(userDto);
-            return jsonMapper.writeValueAsString(createdUserDto.getUid());
+            createdUserDto.setSuccess(true);
+            createdUserDto.setMsg("Successfully created the user.");
+            return jsonMapper
+                    .writerWithView(UserDto.AddView.class)
+                    .writeValueAsString(createdUserDto);
         } catch (Exception e) {
             // Assumes that other constrains including length and email format have been checked by frontend
             // only consider uniqueness here
@@ -70,7 +64,7 @@ public class UserController {
             } else if (errMsg.contains("NICKNAME")) {
                 errMsg = "This nickname has already been used! Please Change another one!";
             }
-            return jsonMapper.writeValueAsString(new ErrorResponse(false, errMsg));
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
     }
 }
