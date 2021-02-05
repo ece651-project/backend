@@ -40,7 +40,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                     .antMatchers("/").permitAll()
                     .antMatchers("/h2-console").permitAll()
                     .antMatchers("/user/add_user").permitAll()
-                    .anyRequest().authenticated() // for other URL: if not login, redirect to login
+//                    .anyRequest().authenticated() // for other URL: if not login, redirect to login
                     .and()
 //                    .addFilter(getAuthenticationFilter()) // for JWT token, need to edit AuthenticationFilter.java if use JWT
                 .formLogin(form -> form

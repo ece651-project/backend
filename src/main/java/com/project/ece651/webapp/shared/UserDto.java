@@ -12,12 +12,6 @@ public class UserDto extends MsgResponse implements Serializable {
     public interface AddView extends MsgView {}
     public interface GetView extends AddView {}
 
-    @JsonView(MsgView.class)
-    private boolean success;
-
-    @JsonView(MsgView.class)
-    private String msg;
-
     @JsonView(AddView.class)
     private String uid;
 
@@ -33,22 +27,6 @@ public class UserDto extends MsgResponse implements Serializable {
     private String password;
 
     private String encryptedPassword;
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 
     public String getUid() {
         return uid;

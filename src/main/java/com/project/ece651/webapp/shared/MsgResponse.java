@@ -1,14 +1,19 @@
 package com.project.ece651.webapp.shared;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.io.Serializable;
 
 public class MsgResponse implements Serializable {
     private static final long serialVersionUID = -7465894520894100732L;
 
-    private boolean success;
-    private String msg;
-
     public interface MsgView {}
+
+    @JsonView(MsgView.class)
+    private boolean success;
+
+    @JsonView(MsgView.class)
+    private String msg;
 
     public MsgResponse() {
     }
