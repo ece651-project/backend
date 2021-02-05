@@ -1,4 +1,4 @@
-package com.project.ece651.webapp.models;
+package com.project.ece651.webapp.shared;
 
 import java.io.Serializable;
 

@@ -1,10 +1,8 @@
 package com.project.ece651.webapp.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.ece651.webapp.entities.UserEntity;
-import com.project.ece651.webapp.models.MsgResponse;
+import com.project.ece651.webapp.shared.MsgResponse;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.UserDto;
 import org.modelmapper.ModelMapper;

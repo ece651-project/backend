@@ -1,8 +1,6 @@
 package com.project.ece651.webapp.shared;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.project.ece651.webapp.models.MsgResponse;
 
 import java.io.Serializable;
 
