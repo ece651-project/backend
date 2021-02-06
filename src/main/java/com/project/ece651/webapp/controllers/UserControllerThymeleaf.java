@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +61,7 @@ public class UserControllerThymeleaf {
         }
 
         UserDto userDto = modelMapper.map(createUserRequestModel, UserDto.class);
-        UserDto createdUserDto = userService.createUser(userDto);
+        UserDto createdUserDto = userService.addUser(userDto);
 
         return "redirect:/user/" + createdUserDto.getUid();
     }
@@ -78,7 +77,7 @@ public class UserControllerThymeleaf {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         UserDto userDto = modelMapper.map(userDetails, UserDto.class);
-        UserDto createdUser = userService.createUser(userDto);
+        UserDto createdUser = userService.addUser(userDto);
 
         CreateUserResponseModel returnValue = modelMapper.map(createdUser, CreateUserResponseModel.class);
 
@@ -88,7 +87,7 @@ public class UserControllerThymeleaf {
     @GetMapping("/{userId}")
     public String showById(@PathVariable String userId, Model model) {
 
-        model.addAttribute("user", userService.getUserByUserId(userId));
+        model.addAttribute("user", userService.findByUid(userId));
 
         return "users/show";
     }

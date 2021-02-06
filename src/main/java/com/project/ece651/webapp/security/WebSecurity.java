@@ -33,35 +33,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         // have to add this to connect to h2-console
         http.headers().frameOptions().disable();
 
-        // TODO: temporary. need to edit antMatchers rules
+        // https://github.com/spring-projects/spring-data-examples/tree/master/rest/security
         // https://stackoverflow.com/questions/24696717/spring-security-permitall-not-allowing-anonymous-access
+        // https://stackoverflow.com/questions/28907030/spring-security-authorize-request-for-url-method-using-httpsecurity
         http
                 .authorizeRequests()
-                    .antMatchers("/").permitAll()
-                    .antMatchers("/h2-console").permitAll()
-                    .antMatchers("/user/add_user").permitAll()
-//                    .anyRequest().authenticated() // for other URL: if not login, redirect to login
-                    .and()
-//                    .addFilter(getAuthenticationFilter()) // for JWT token, need to edit AuthenticationFilter.java if use JWT
-                .formLogin(form -> form
-                        .loginPage("/user/login")
-                        .permitAll());
-//                .logout()
-//                .logoutUrl("/user/logout")
-//                .logoutSuccessUrl("/user/login");
-    }
-
-    // not used now, for JWT
-    private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(userService, environment, authenticationManager());
-//        authenticationFilter.setAuthenticationManager(authenticationManager());
-        authenticationFilter.setFilterProcessesUrl(environment.getProperty("login.url.path"));  // application.properties file
-        return authenticationFilter;
-    }
-
-    // set the password encoder
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
+                    .antMatchers("/**").permitAll();
     }
 }

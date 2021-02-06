@@ -37,9 +37,9 @@ public class UserServiceImplIT {
         userDto.setPassword("abcdefgh");
         userDto.setPhoneNum("1111222233331");
 
-        UserDto savedUserDto = userService.createUser(userDto);
+        UserDto savedUserDto = userService.addUser(userDto);
 
-        UserDto resultUserDto = userService.getUserByUserId(savedUserDto.getUid());
+        UserDto resultUserDto = userService.findByUid(savedUserDto.getUid());
         assertEquals("Lee", resultUserDto.getNickname());
         assertEquals("123@gmail.com", resultUserDto.getEmail());
         // resultUserDto.getPassword() will return encrypted password

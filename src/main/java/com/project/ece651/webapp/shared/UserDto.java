@@ -11,11 +11,12 @@ public class UserDto extends MsgResponse implements Serializable {
     // public interface MsgView {}
     public interface AddView extends MsgView {}
     public interface GetView extends AddView {}
+    public interface LoginView {}
 
     @JsonView(AddView.class)
     private String uid;
 
-    @JsonView(GetView.class)
+    @JsonView({GetView.class, LoginView.class})
     private String email;
 
     @JsonView(GetView.class)
@@ -24,6 +25,7 @@ public class UserDto extends MsgResponse implements Serializable {
     @JsonView(GetView.class)
     private String phoneNum;
 
+    @JsonView(LoginView.class)
     private String password;
 
     private String encryptedPassword;

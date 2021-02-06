@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -17,7 +18,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest {
 
@@ -28,17 +28,19 @@ class UserControllerTest {
 
     MockMvc mockMvc;
 
-    ModelMapper modelMapper;
     ObjectMapper jsonMapper;
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+    ModelMapper modelMapper;
 
     @BeforeEach
     void setUp() {
         userService = mock(UserService.class);
 
+        jsonMapper = new ObjectMapper();
+        bCryptPasswordEncoder = new BCryptPasswordEncoder();
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        jsonMapper = new ObjectMapper();
-        controller = new UserController(userService, jsonMapper, modelMapper);
+        controller = new UserController(userService, jsonMapper, bCryptPasswordEncoder, modelMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -51,7 +53,7 @@ class UserControllerTest {
         String expectedUid = "0d2adfec-1ce9-483c-a1e7-59d31df";
         userDto.setUid(expectedUid);
 
-        when(userService.createUser(any())).thenReturn(userDto);
+        when(userService.addUser(any())).thenReturn(userDto);
 
         // in JSON format: the content does not matter
         String userRequestBody = "{\"nickname\":\"bbbbbbbb\",\"email\":\"bbbbbb@163.com\",\"password\":\"22222222\", \"phoneNum\":\"12345678910\"}";
