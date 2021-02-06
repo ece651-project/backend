@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 /*TODO:
-    1. change the html file name to be consistent with frontend
-    2. add update and delete controller methods
-    3. login
+    1. add get, update and delete controller methods
 */
 @Controller
 @RequestMapping("/user")
@@ -38,7 +36,9 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public String login(@RequestBody String loginJson) throws IOException {
         UserDto userDto = jsonMapper
