@@ -33,26 +33,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         // have to add this to connect to h2-console
         http.headers().frameOptions().disable();
 
-//        // TODO: temporary. edit to allow paths only after login
-//        http.authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/h2-console").permitAll()
-//                .antMatchers(HttpMethod.POST, "/users").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .addFilter(getAuthenticationFilter());
-    }
-
-    private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(userService, environment, authenticationManager());
-//        authenticationFilter.setAuthenticationManager(authenticationManager());
-        authenticationFilter.setFilterProcessesUrl(environment.getProperty("login.url.path"));  // application.properties file
-        return authenticationFilter;
-    }
-
-    // set the password encoder
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
+        // https://github.com/spring-projects/spring-data-examples/tree/master/rest/security
+        // https://stackoverflow.com/questions/24696717/spring-security-permitall-not-allowing-anonymous-access
+        // https://stackoverflow.com/questions/28907030/spring-security-authorize-request-for-url-method-using-httpsecurity
+        http
+                .authorizeRequests()
+                    .antMatchers("/**").permitAll();
     }
 }

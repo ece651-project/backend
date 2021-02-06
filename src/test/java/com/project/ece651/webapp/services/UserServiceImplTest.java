@@ -43,7 +43,7 @@ class UserServiceImplTest {
         userDto.setPhoneNum("1111222233331");
 
         // when
-        UserDto createdUserDto = userService.createUser(userDto);
+        UserDto createdUserDto = userService.addUser(userDto);
 
         // then
         verify(userRepository, times(1)).save(any(UserEntity.class));

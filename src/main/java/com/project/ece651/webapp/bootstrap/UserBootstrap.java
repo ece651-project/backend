@@ -76,13 +76,13 @@ public class UserBootstrap implements ApplicationListener<ContextRefreshedEvent>
         user1.setEmail("lilei@gmail.com");
         user1.setPassword("leileili");
         user1.setPhoneNum("1231231231231");
-        userService.createUser(user1);
+        userService.addUser(user1);
 
         UserDto user2 = new UserDto();
         user2.setNickname("Han Meimei");
         user2.setEmail("hanmeimei@gmail.com");
         user2.setPassword("meimeihan");
         user2.setPhoneNum("4564564564564");
-        userService.createUser(user2);
+        userService.addUser(user2);
     }
 }
