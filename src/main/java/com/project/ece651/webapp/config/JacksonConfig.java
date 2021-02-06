@@ -19,6 +19,7 @@ public class JacksonConfig {
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         // (official) https://github.com/FasterXML/jackson-databind/wiki/Serialization-Features
         // https://stackoverflow.com/questions/18031125/what-is-the-difference-between-enum-name-and-enum-tostring
+
         // mapper.configure(WRITE_ENUMS_USING_TO_STRING, true);
 
         // need to include this, or annotate password and encryptedPassword with a new type of @JsonView
