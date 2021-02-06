@@ -32,15 +32,12 @@ public class UserServiceImpl implements UserService {
         this.modelMapper = modelMapper;
     }
 
-    public UserDto createUser(UserDto userDetails) {
+    public UserDto addUser(UserDto userDto) {
 
-        userDetails.setUid(UUID.randomUUID().toString());
-        userDetails.setEncryptedPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
-//        ModelMapper modelMapper = new ModelMapper();
-//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        userDto.setUid(UUID.randomUUID().toString());
+        userDto.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
 
-        UserEntity userEntity = modelMapper.map(userDetails, UserEntity.class);
-
+        UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
         userRepository.save(userEntity);
 
         return modelMapper.map(userEntity, UserDto.class);
@@ -50,21 +47,21 @@ public class UserServiceImpl implements UserService {
      * email is treated as the username
      * override method of UserDetailsService interface
      */
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByEmail(email);
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        UserEntity userEntity = userRepository.findByEmail(email);
+//
+//        if (userEntity == null) {
+//            throw new UsernameNotFoundException(email + ": User not found");
+//        }
+//
+//        // User class is from Spring Security: first 2 paras are username and password
+//        // the last para authorities is not used, so pass in an empty list
+//        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(),
+//                true, true, true, true, new ArrayList<>());
+//    }
 
-        if (userEntity == null) {
-            throw new UsernameNotFoundException(email + ": User not found");
-        }
-
-        // User class is from Spring Security: first 2 paras are username and password
-        // the last para authorities is not used, so pass in an empty list
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(),
-                true, true, true, true, new ArrayList<>());
-    }
-
-    public UserDto getUserByUserId(String userId) {
+    public UserDto findByUid(String userId) {
         UserEntity userEntity = userRepository.findByUid(userId);
         if (userEntity == null) {
             return null;
@@ -74,7 +71,7 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(userEntity, UserDto.class);
     }
 
-    public UserDto getUserByEmail(String email) {
+    public UserDto findByEmail(String email) {
         UserEntity userEntity = userRepository.findByEmail(email);
         if (userEntity == null) {
             return null;

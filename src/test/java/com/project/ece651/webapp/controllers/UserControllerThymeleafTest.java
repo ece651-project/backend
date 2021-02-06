@@ -43,7 +43,7 @@ class UserControllerThymeleafTest {
         UserDto userDto = new UserDto();
         userDto.setNickname("Jack");
 
-        when(userService.createUser(any())).thenReturn(userDto);
+        when(userService.addUser(any())).thenReturn(userDto);
 
         // in JSON format
         String userRequestBody = "{\"nickname\":\"aaaaaaaa\",\"email\":\"aaaaaa@163.com\",\"password\":\"11111111\", \"phoneNum\":\"12345678910\"}";

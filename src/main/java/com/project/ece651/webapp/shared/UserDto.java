@@ -1,16 +1,33 @@
 package com.project.ece651.webapp.shared;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.io.Serializable;
 
 // DTO: data transfer object
-public class UserDto implements Serializable {
+public class UserDto extends MsgResponse implements Serializable {
     private static final long serialVersionUID = 3031456972238819242L;
 
+    // public interface MsgView {}
+    public interface AddView extends MsgView {}
+    public interface GetView extends AddView {}
+    public interface LoginView {}
+
+    @JsonView(AddView.class)
     private String uid;
+
+    @JsonView({GetView.class, LoginView.class})
     private String email;
+
+    @JsonView(GetView.class)
     private String nickname;
+
+    @JsonView(GetView.class)
     private String phoneNum;
+
+    @JsonView(LoginView.class)
     private String password;
+
     private String encryptedPassword;
 
     public String getUid() {

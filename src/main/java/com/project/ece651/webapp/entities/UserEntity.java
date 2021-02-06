@@ -27,7 +27,7 @@ public class UserEntity implements Serializable{
     private String nickname;
 
     // TODO: maybe another specialized constraint for phone number
-    @Column(nullable=false)
+    @Column
     private String phoneNum;
 
     @Column(nullable=false, unique=true)
