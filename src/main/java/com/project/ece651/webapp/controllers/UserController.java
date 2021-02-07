@@ -40,13 +40,23 @@ public class UserController {
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public String login(@RequestBody String loginJson) throws IOException {
-        UserDto userDto = jsonMapper
-                .readerWithView(UserDto.LoginView.class)
-                .readValue(loginJson, UserDto.class);
+    public String login(@RequestBody String loginJson) throws JsonProcessingException {
+        // read info from the request body
+        UserDto userDto;
+        try {
+            userDto = jsonMapper
+                    .readerWithView(UserDto.LoginView.class)
+                    .readValue(loginJson, UserDto.class);
+        } catch (IOException e) {
+            String errMsg = "Json processing error.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
         String email = userDto.getEmail();
         String password = userDto.getPassword();
+
+        // find the user in DB
         UserDto foundUserDto = userService.findByEmail(email);
+
         if (foundUserDto == null) {
             String errMsg = "User account with this email does not exist!";
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
@@ -55,6 +65,8 @@ public class UserController {
             String errMsg = "Password is incorrect!";
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
+
+        // login successfully
         foundUserDto.setSuccess(true);
         foundUserDto.setMsg("Login successfully!");
         return jsonMapper
@@ -69,14 +81,31 @@ public class UserController {
     @ResponseBody
     public String addUser(@RequestBody String userJson) throws JsonProcessingException {
         try {
-            UserDto userDto = jsonMapper.readValue(userJson, UserDto.class);
+            // read info from the request body
+            UserDto userDto;
+            try {
+                userDto = jsonMapper.readValue(userJson, UserDto.class);
+            } catch (JsonProcessingException e) {
+                String errMsg = "Json processing error.";
+                return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+            }
+
+            // add the new user to the DB
             UserDto createdUserDto = userService.addUser(userDto);
+
+            // add the new user successfully
             createdUserDto.setSuccess(true);
             createdUserDto.setMsg("Successfully created the user.");
             return jsonMapper
                     .writerWithView(UserDto.AddView.class)
                     .writeValueAsString(createdUserDto);
+
+        } catch (JsonProcessingException e) {
+
+            String errMsg = "Json processing error.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         } catch (Exception e) {
+
             // Assumes that other constrains including length and email format have been checked by frontend
             // only consider uniqueness here
             String errMsg = e.getMessage();
