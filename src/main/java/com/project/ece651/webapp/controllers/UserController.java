@@ -88,5 +88,67 @@ public class UserController {
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
     }
+
+    @GetMapping("/get_user/{uid}")
+    @ResponseBody
+    public String getUser(@PathVariable String uid) throws JsonProcessingException {
+        try {
+            UserDto user = userService.findByUid(uid);
+            if (user == null) {
+                String errMsg = "User not found.";
+                return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+            } else {
+                user.setSuccess(true);
+                return jsonMapper.writerWithView(UserDto.GetView.class).writeValueAsString(user);
+            }
+        } catch (Exception e) {
+            String errMsg = "Unknown error.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+    }
+
+    // TODO to update a user, the uid of the user is also needed
+    @PostMapping(value = "/update_user",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public String updateUser(@RequestBody String userJson) throws JsonProcessingException {
+        // Extract data from userJson
+        UserDto updatedUser = null;
+        try {
+            updatedUser = jsonMapper.readValue(userJson, UserDto.class);
+        } catch (Exception e) {
+            String errMsg = "Json processing error.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        // Check whether the user exists
+        UserDto userFound = userService.findByUid(updatedUser.getUid());
+        if (userFound == null) {
+            String errMsg = "This user does not exist.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        // Update the user
+        userService.updateUser(updatedUser);
+
+        return jsonMapper.writeValueAsString(new MsgResponse(true, "User updated."));
+    }
+
+    @GetMapping("/delete_user/{uid}")
+    @ResponseBody
+    public String deleteUser(@PathVariable String uid) throws JsonProcessingException {
+        // Check if the user exists
+        UserDto userFound = userService.findByUid(uid);
+        if (userFound == null) {
+            String errMsg = "User not found.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        } else {
+            userService.deleteUser(uid);
+
+            String successMsg = "User " + uid + " deleted.";
+            return jsonMapper.writeValueAsString(new MsgResponse(true, successMsg));
+        }
+    }
 }
 

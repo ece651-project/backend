@@ -82,4 +82,28 @@ public class UserServiceImpl implements UserService {
     }
 
     // TODO: add methods
+    public void updateUser(UserDto updatedUser) {
+        // Obtain the original user in the database
+        UserEntity originalUser = userRepository.findByUid(updatedUser.getUid());
+
+        /* Update the information of the user
+         * Information used is the same as add_user, which are:
+         *  - email
+         *  - nickname
+         *  - phoneNum
+         *  - password
+         */
+        originalUser.setEmail(updatedUser.getEmail());
+        originalUser.setNickname(updatedUser.getNickname());
+        originalUser.setPhoneNum(updatedUser.getPhoneNum());
+        originalUser.setEncryptedPassword(bCryptPasswordEncoder.encode(updatedUser.getPassword()));
+
+        // Save the updated data
+        userRepository.save(originalUser);
+    }
+
+    public void deleteUser(String uid) {
+        UserEntity userToDelete = userRepository.findByUid(uid);
+        userRepository.delete(userToDelete);
+    }
 }
