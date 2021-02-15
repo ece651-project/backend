@@ -188,12 +188,11 @@ class UserControllerTest {
         when(userService.findByUid(anyString())).thenReturn(user);
 
         // Get response message
-        String response = mockMvc.perform(get("/get_user/"))
+        String response = mockMvc.perform(get("/user/get_user/" + uid))
                 .andReturn().getResponse().getContentAsString();
         UserDto msg = jsonMapper.readValue(response, UserDto.class);
 
         // Check response message
-        assertTrue(msg.isSuccess());
         assertEquals(uid, msg.getUid());
         assertEquals(nickname, msg.getNickname());
         assertEquals(email, msg.getEmail());
