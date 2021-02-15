@@ -10,10 +10,10 @@ public class UserDto extends MsgResponse implements Serializable {
 
     // public interface MsgView {}
     public interface AddView extends MsgView {}
-    public interface GetView extends AddView {}
+    public interface GetView {} // extends AddView {}
     public interface LoginView {}
 
-    @JsonView(AddView.class)
+    @JsonView({GetView.class, AddView.class})
     private String uid;
 
     @JsonView({GetView.class, LoginView.class})
