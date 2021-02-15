@@ -108,7 +108,7 @@ public class UserController {
     }
 
     // TODO to update a user, the uid of the user is also needed
-    @PostMapping(value = "/update_user",
+    @PutMapping(value = "/update_user",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
@@ -119,6 +119,11 @@ public class UserController {
             updatedUser = jsonMapper.readValue(userJson, UserDto.class);
         } catch (Exception e) {
             String errMsg = "Json processing error.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        if (updatedUser.getUid() == null) {
+            String errMsg = "User ID not provided.";
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
 
@@ -135,7 +140,7 @@ public class UserController {
         return jsonMapper.writeValueAsString(new MsgResponse(true, "User updated."));
     }
 
-    @GetMapping("/delete_user/{uid}")
+    @DeleteMapping("/delete_user/{uid}")
     @ResponseBody
     public String deleteUser(@PathVariable String uid) throws JsonProcessingException {
         // Check if the user exists
