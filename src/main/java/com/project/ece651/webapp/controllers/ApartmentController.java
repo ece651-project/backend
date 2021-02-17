@@ -1,18 +1,18 @@
 package com.project.ece651.webapp.controllers;
 
-        import com.project.ece651.webapp.entities.ApartmentEntity;
-        import com.project.ece651.webapp.entities.UserEntity;
-        import com.project.ece651.webapp.repositories.ApartmentRepository;
-        import com.project.ece651.webapp.repositories.UserRepository;
-        import com.project.ece651.webapp.shared.ApartmentDto;
-        import com.project.ece651.webapp.shared.MsgDto;
-        import com.project.ece651.webapp.utils.ApartmentUtils;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.http.HttpStatus;
-        import org.springframework.web.bind.annotation.*;
+import com.project.ece651.webapp.entities.ApartmentEntity;
+import com.project.ece651.webapp.entities.UserEntity;
+import com.project.ece651.webapp.repositories.ApartmentRepository;
+import com.project.ece651.webapp.repositories.UserRepository;
+import com.project.ece651.webapp.shared.ApartmentDto;
+import com.project.ece651.webapp.shared.MsgDto;
+import com.project.ece651.webapp.utils.ApartmentUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-        import java.util.ArrayList;
-        import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
