@@ -10,15 +10,15 @@ public class CorsConfig {
 
     // CORS ref:
     // https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    // https://spring.io/guides/gs/rest-service-cors/
+    // https://spring.io/guides/gs/rest-service-cors
+    // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/cors/CorsConfiguration.html
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                // TODO: add URLs
                 // Path pattern ref: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/util/pattern/PathPattern.html
-                registry.addMapping("/**").allowedOrigins("http://localhost:8080");
+                registry.addMapping("/**").allowedOrigins("*"); // * for all origins
             }
         };
     }
