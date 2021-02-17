@@ -1,20 +1,23 @@
 package com.project.ece651.webapp.shared;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.ece651.webapp.entities.Type;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 
 // data transfer object that contains all information to be conveyed about a typical apartment entity
-// extend ResponseDto to support an error message (will be useful when the query fails)
-public class ApartmentDto extends ResponseDto implements Serializable {
+// extend MsgDto to support an error message (will be useful when the query fails)
+public class ApartmentDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
     private long aid;
     private String landlordId;
     private Type type;
     private String address;
     private Timestamp uploadTime;
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date startMonth;
+    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date endMonth;
     private String description;
     private int price;
