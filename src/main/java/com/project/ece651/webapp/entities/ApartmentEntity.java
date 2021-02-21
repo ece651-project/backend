@@ -2,6 +2,8 @@ package com.project.ece651.webapp.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "apartment")
@@ -29,6 +31,15 @@ public class ApartmentEntity implements Serializable {
         2. Start month
         3. End month
      */
+    // reference https://stackoverflow.com/questions/1335374/jpa-set-timestamp-field-to-current-timestamp-when-persisting
+    @Column(nullable=false, updatable=false, insertable=false, columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp uploadTime;
+
+    @Column(nullable=true)
+    private Date startMonth;
+
+    @Column(nullable=true)
+    private Date endMonth;
 
     @Column(nullable=false)
     private String description;
@@ -90,5 +101,29 @@ public class ApartmentEntity implements Serializable {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Timestamp getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(Timestamp uploadTime) {
+        this.uploadTime = uploadTime;
+    }
+
+    public Date getStartMonth() {
+        return startMonth;
+    }
+
+    public void setStartMonth(Date startMonth) {
+        this.startMonth = startMonth;
+    }
+
+    public Date getEndMonth() {
+        return endMonth;
+    }
+
+    public void setEndMonth(Date endMonth) {
+        this.endMonth = endMonth;
     }
 }

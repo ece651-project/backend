@@ -24,6 +24,7 @@ public class JacksonConfig {
 
         // need to include this, or annotate password and encryptedPassword with a new type of @JsonView
         mapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
+
         return mapper;
     }
 }
