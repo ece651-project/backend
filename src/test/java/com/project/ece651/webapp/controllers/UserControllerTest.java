@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest {
@@ -164,5 +165,63 @@ class UserControllerTest {
 
         assertFalse(responseMsg.isSuccess());
         assertEquals("Password is incorrect!", responseMsg.getMsg());
+    }
+
+    @Test
+    void testGetUserSuccess() throws Exception {
+        // User info
+        String uid = "0d2adfec-1ce9-483c-a1e7-59d31df";
+        String nickname = "Li Lei";
+        String email = "lilei@gmail.com";
+        String password = "leileili";
+        String phoneNum = "1231231231231";
+
+        // Create User
+        UserDto user = new UserDto();
+        user.setUid(uid);
+        user.setNickname(nickname);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhoneNum(phoneNum);
+        user.setEncryptedPassword(bCryptPasswordEncoder.encode(password));
+
+        when(userService.findByUid(anyString())).thenReturn(user);
+
+        // Get response message
+        String response = mockMvc.perform(get("/user/get_user/" + uid))
+                .andReturn().getResponse().getContentAsString();
+        UserDto msg = jsonMapper.readValue(response, UserDto.class);
+
+        // Check response message
+        assertEquals(uid, msg.getUid());
+        assertEquals(nickname, msg.getNickname());
+        assertEquals(email, msg.getEmail());
+        assertEquals(phoneNum, msg.getPhoneNum());
+    }
+
+    @Test
+    void testUpdateUserSuccess() throws Exception {
+        // User info
+        String uid = "0d2adfec-1ce9-483c-a1e7-59d31df";
+        String nickname = "Li Lei";
+        String email = "lilei@gmail.com";
+        String password = "leileili";
+        String phoneNum = "1231231231231";
+        String updatedNickname = "Li Yue";
+
+        // Create Users
+        UserDto user = new UserDto();
+        user.setUid(uid);
+        user.setNickname(nickname);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhoneNum(phoneNum);
+        user.setEncryptedPassword(bCryptPasswordEncoder.encode(password));
+
+        UserDto updatedUser = user;
+        updatedUser.setNickname(updatedNickname);
+
+        when(userService.findByUid(anyString())).thenReturn(user);
+//        when(userService.updateUser(updatedUser))
     }
 }
