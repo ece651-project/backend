@@ -1,7 +1,7 @@
 package com.project.ece651.webapp.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.ece651.webapp.repositories.ApartmentRepository;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.MsgResponse;
 import com.project.ece651.webapp.shared.UserDto;
@@ -29,6 +29,9 @@ class UserControllerTest {
     @Mock
     UserService userService;
 
+    @Mock
+    ApartmentRepository apartmentRepository;
+
     UserController controller;
 
     MockMvc mockMvc;
@@ -45,7 +48,7 @@ class UserControllerTest {
         bCryptPasswordEncoder = new BCryptPasswordEncoder();
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        controller = new UserController(userService, jsonMapper, bCryptPasswordEncoder, modelMapper);
+        controller = new UserController(userService, apartmentRepository, jsonMapper, bCryptPasswordEncoder, modelMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
