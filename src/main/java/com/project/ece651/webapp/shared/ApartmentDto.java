@@ -15,9 +15,9 @@ public class ApartmentDto implements Serializable {
     private Type type;
     private String address;
     private Timestamp uploadTime;
-    @JsonFormat(pattern="yyyy-MM")
+    @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
     private Date startMonth;
-    @JsonFormat(pattern="yyyy-MM")
+    @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
     private Date endMonth;
     private String description;
     private int price;
