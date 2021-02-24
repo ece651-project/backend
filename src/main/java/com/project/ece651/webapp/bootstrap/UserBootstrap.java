@@ -10,50 +10,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Component
-//@Profile("default")
-//public class UserBootstrap implements ApplicationListener<ContextRefreshedEvent> {
-//    Logger logger = LoggerFactory.getLogger(this.getClass());
-//
-//    private final UserRepository userRepository;
-//
-//    public UserBootstrap(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//        userRepository.saveAll(getInitialUsers());
-//        logger.debug("Loading bootstrap user data");
-//    }
-//
-//    private List<UserEntity> getInitialUsers() {
-//        List<UserEntity> users = new ArrayList<>(2);
-//
-//        UserEntity user1 = new UserEntity();
-//        // id is auto incremented by DB
-////        user1.setId(1L);
-//        user1.setUserId("1");
-//        user1.setUserName("Li Lei");
-//        user1.setEmail("lilei@gmail.com");
-//        user1.setEncryptedPassword("$2a$10$arNGWGeos6wQa3Oqrx2kK.jCLli8HTyqEwOQUHawo1INXgdi/eDE2");
-//        users.add(user1);
-//
-//        UserEntity user2 = new UserEntity();
-////        user2.setId(2L);
-//        user2.setUserId("2");
-//        user2.setUserName("Han Meimei");
-//        user2.setEmail("hanmeimei@gmail.com");
-//        user2.setEncryptedPassword("fafvwqc15bgtfvf");
-//        users.add(user2);
-//
-//        return users;
-//    }
-//}
-
+// Please annotate this class after using it for the first time if spring.jpa.hibernate.ddl-auto=update.
+// Otherwise, fail to insert duplicate entries.
 @Component
-@Profile("default")
+// @Profile("default")
 public class UserBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
