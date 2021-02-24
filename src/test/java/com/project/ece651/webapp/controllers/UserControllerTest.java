@@ -1,7 +1,7 @@
 package com.project.ece651.webapp.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.ece651.webapp.repositories.ApartmentRepository;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.MsgResponse;
 import com.project.ece651.webapp.shared.UserDto;
@@ -20,14 +20,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UserControllerTest {
 
     @Mock
     UserService userService;
+
+    @Mock
+    ApartmentRepository apartmentRepository;
 
     UserController controller;
 
@@ -45,7 +47,7 @@ class UserControllerTest {
         bCryptPasswordEncoder = new BCryptPasswordEncoder();
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        controller = new UserController(userService, jsonMapper, bCryptPasswordEncoder, modelMapper);
+        controller = new UserController(userService, apartmentRepository, jsonMapper, bCryptPasswordEncoder, modelMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -167,6 +169,7 @@ class UserControllerTest {
         assertEquals("Password is incorrect!", responseMsg.getMsg());
     }
 
+    /* ------------------ getUser() tests ---------------------- */
     @Test
     void testGetUserSuccess() throws Exception {
         // User info
@@ -200,28 +203,97 @@ class UserControllerTest {
     }
 
     @Test
-    void testUpdateUserSuccess() throws Exception {
+    void testGetUserNotFound() throws Exception {
         // User info
         String uid = "0d2adfec-1ce9-483c-a1e7-59d31df";
-        String nickname = "Li Lei";
-        String email = "lilei@gmail.com";
-        String password = "leileili";
-        String phoneNum = "1231231231231";
-        String updatedNickname = "Li Yue";
 
-        // Create Users
-        UserDto user = new UserDto();
-        user.setUid(uid);
-        user.setNickname(nickname);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setPhoneNum(phoneNum);
-        user.setEncryptedPassword(bCryptPasswordEncoder.encode(password));
+        when(userService.findByUid(anyString())).thenReturn(null);
 
-        UserDto updatedUser = user;
-        updatedUser.setNickname(updatedNickname);
+        // Get response message
+        String response = mockMvc.perform(get("/user/get_user/" + uid))
+                .andReturn().getResponse().getContentAsString();
+        UserDto msg = jsonMapper.readValue(response, UserDto.class);
 
-        when(userService.findByUid(anyString())).thenReturn(user);
-//        when(userService.updateUser(updatedUser))
+        // Check response message
+        assertFalse(msg.isSuccess());
+        assertEquals("User not found.", msg.getMsg());
+    }
+
+    /* ------------------ updateUser() tests ---------------------- */
+    @Test
+    void testUpdateUserUserNotFound() throws Exception {
+        when(userService.findByUid(anyString())).thenReturn(null);
+
+        // Get response message
+        String requestBody = "{" +
+                "\"uid\": \"aab18deb-c279-46c1-a43b-7bd6a02dd473\"," +
+                "\"nickname\": \"bbbbbbbb\"," +
+                "\"email\": \"bbbbbb@163.com\"," +
+                "\"password\": \"22222222\"," +
+                "\"phoneNum\": \"123456789101\"}";
+        String reponse = mockMvc.perform(put("/user/update_user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+        ).andReturn().getResponse().getContentAsString();
+        MsgResponse responseMsg = jsonMapper.readValue(reponse, MsgResponse.class);
+
+        assertFalse(responseMsg.isSuccess());
+        assertEquals("This user does not exist.", responseMsg.getMsg());
+    }
+
+    @Test
+    void testUpdateUserUidNotProvided() throws Exception {
+        when(userService.findByUid(anyString())).thenReturn(null);
+
+        // Get response message
+        String requestBody = "{" +
+                "\"nickname\": \"bbbbbbbb\"," +
+                "\"email\": \"bbbbbb@163.com\"," +
+                "\"password\": \"22222222\"," +
+                "\"phoneNum\": \"123456789101\"}";
+        String response = mockMvc.perform(put("/user/update_user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
+        ).andReturn().getResponse().getContentAsString();
+        MsgResponse responseMsg = jsonMapper.readValue(response, MsgResponse.class);
+
+        assertFalse(responseMsg.isSuccess());
+        assertEquals("User ID not provided.", responseMsg.getMsg());
+    }
+
+    /* ------------------ deleteUser() tests ---------------------- */
+    @Test
+    void testDeleteUserNotFound() throws Exception {
+        // User info
+        String uid = "0d2adfec-1ce9-483c-a1e7-59d31df";
+
+        when(userService.findByUid(anyString())).thenReturn(null);
+
+        // Get response message
+        String response = mockMvc.perform(delete("/user/delete_user/" + uid))
+                .andReturn().getResponse().getContentAsString();
+        UserDto msg = jsonMapper.readValue(response, UserDto.class);
+
+        // Check response message
+        assertFalse(msg.isSuccess());
+        assertEquals("User not found.", msg.getMsg());
+    }
+
+    /* ------------- listAllOwnedApartments() tests ----------------- */
+    @Test
+    void testListAllOwnedApartmentsUserNotFound() throws Exception {
+        // User info
+        String uid = "0d2adfec-1ce9-483c-a1e7-59d31df";
+
+        when(userService.findByUid(anyString())).thenReturn(null);
+
+        // Get response message
+        String response = mockMvc.perform(get("/user/get_apt/" + uid))
+                .andReturn().getResponse().getContentAsString();
+        UserDto msg = jsonMapper.readValue(response, UserDto.class);
+
+        // Check response message
+        assertFalse(msg.isSuccess());
+        assertEquals("User not found.", msg.getMsg());
     }
 }

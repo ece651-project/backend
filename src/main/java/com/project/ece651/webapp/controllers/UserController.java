@@ -2,6 +2,9 @@ package com.project.ece651.webapp.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.ece651.webapp.entities.ApartmentEntity;
+import com.project.ece651.webapp.repositories.ApartmentRepository;
+import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgResponse;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.UserDto;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*TODO:
     1. add get, update and delete controller methods
@@ -22,15 +27,17 @@ import java.io.IOException;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final ApartmentRepository apartmentRepository;
     private final ObjectMapper jsonMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public UserController(UserService userService, ObjectMapper jsonMapper,
+    public UserController(UserService userService, ApartmentRepository apartmentRepository, ObjectMapper jsonMapper,
                           BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper modelMapper) {
         this.userService = userService;
+        this.apartmentRepository = apartmentRepository;
         this.jsonMapper = jsonMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.modelMapper = modelMapper;
@@ -182,6 +189,27 @@ public class UserController {
 
             String successMsg = "User " + uid + " deleted.";
             return jsonMapper.writeValueAsString(new MsgResponse(true, successMsg));
+        }
+    }
+
+    @GetMapping("/get_apt/{uid}")
+    @ResponseBody
+    public String listAllOwnedApartments(@PathVariable String uid) throws JsonProcessingException {
+        // Check if the user exists
+        UserDto userFound = userService.findByUid(uid);
+        if (userFound == null) {
+            String errMsg = "User not found.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        } else {
+            List<ApartmentEntity> apartmentEntities = apartmentRepository.findAll();
+
+            // Find the apartments that belong to this user
+            List<ApartmentDto> apartmentDtos = apartmentEntities.stream()
+                    .filter(apartmentEntity -> apartmentEntity.getLandlord().getUid().equals(uid))
+                    .map(apartmentEntity -> modelMapper.map(apartmentEntity, ApartmentDto.class))
+                    .collect(Collectors.toList());
+
+            return jsonMapper.writeValueAsString(apartmentDtos);
         }
     }
 }
