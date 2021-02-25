@@ -103,4 +103,21 @@ public class UserEntity implements Serializable{
         return this;
     }
 
+    public List<ApartmentEntity> getFavoriteApartments() {
+        return favoriteApartments;
+    }
+
+    public UserEntity addFavoriteApartments(ApartmentEntity favoriteApartment) {
+        if (!this.favoriteApartments.contains(favoriteApartment)) {
+            this.favoriteApartments.add(favoriteApartment);
+        }
+        return this;
+    }
+
+    public UserEntity delFavoriteApartments(ApartmentEntity favoriteApartment) {
+        if (this.favoriteApartments.contains(favoriteApartment)) {
+            this.favoriteApartments.remove(favoriteApartment);
+        }
+        return this;
+    }
 }
