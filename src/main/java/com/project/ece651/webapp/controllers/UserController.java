@@ -8,15 +8,20 @@ import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgResponse;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.UserDto;
+import com.project.ece651.webapp.shared.UserFavDto;
+import org.apache.tomcat.util.json.JSONParser;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -211,6 +216,87 @@ public class UserController {
 
             return jsonMapper.writeValueAsString(apartmentDtos);
         }
+    }
+
+    @PostMapping(value = "/add_fav",
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public String addFav(@RequestBody String addFavJson) throws JsonProcessingException {
+        // Obtain the Json data
+        UserFavDto userFav;
+        try {
+            userFav = jsonMapper.readValue(addFavJson, UserFavDto.class);
+        } catch (IOException e) {
+            String errMsg = "Json processing error.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        // Check whether the user exists
+        UserDto userFound = userService.findByUid(userFav.getUid());
+        if (userFound == null) {
+            String errMsg = "This user does not exist.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        // Check whether the apartment exists
+        ApartmentEntity apartment = apartmentRepository.findByAid(userFav.getAid());
+        if (apartment == null) {
+            String errMsg = "This apartment does not exist.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        // Add the favourite apartment to the user
+        userService.addFav(userFav.getUid(), apartment);
+
+        String returnMsg = "Favourite apartment added for user " + userFav.getUid() + ".";
+        return jsonMapper.writeValueAsString(new MsgResponse(true, returnMsg));
+    }
+
+    @DeleteMapping("/delete_fav/{uid}/{aid}")
+    @ResponseBody
+    public String deleteFav(@PathVariable String uid, @PathVariable Long aid) throws JsonProcessingException {
+        // Check if the user exists
+        UserDto userFound = userService.findByUid(uid);
+        if (userFound == null) {
+            String errMsg = "User not found.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        // Check if the apartment exists
+        ApartmentEntity apartment = apartmentRepository.findByAid(aid);
+        if (apartment == null) {
+            String errMsg = "This apartment does not exist.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        // Delete the favourite apartment to the user
+        userService.delFav(uid, apartment);
+
+        String returnMsg = "Favourite apartment deleted for user " + uid + ".";
+        return jsonMapper.writeValueAsString(new MsgResponse(true, returnMsg));
+    }
+
+    @GetMapping("/get_fav/{uid}")
+    @ResponseBody
+    public String getFavs(@PathVariable String uid) throws JsonProcessingException {
+        // Check if the user exists
+        UserDto userFound = userService.findByUid(uid);
+        if (userFound == null) {
+            String errMsg = "User not found.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        /* this is wrong when single-side many-to-many: Infinite recursion (StackOverflowError) (through reference chain) */
+//        List<ApartmentEntity> apartments = userFound.getFavoriteApartments();
+//
+//        List<ApartmentDto> apartmentDtos = apartments.stream()
+//                .map(apartmentEntity -> modelMapper.map(apartmentEntity, ApartmentDto.class))
+//                .collect(Collectors.toList());
+
+        List<ApartmentDto> apartmentDtos = userFound.getFavoriteApartments();
+
+        return jsonMapper.writeValueAsString(apartmentDtos);
     }
 }
 

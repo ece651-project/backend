@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "apartment")
@@ -17,7 +18,7 @@ public class ApartmentEntity implements Serializable {
     // Default AUTO is also ok.
     private long aid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private UserEntity landlord;
 
     //@Column(name = "apt_type")  // type is a keyword in MySQL
@@ -55,6 +56,9 @@ public class ApartmentEntity implements Serializable {
 
     @Column(nullable=false)
     private int price;
+
+//    @ManyToMany(mappedBy = "favoriteApartments")
+//    private List<UserEntity> users;
 
     public long getAid() {
         return aid;

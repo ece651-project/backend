@@ -1,8 +1,12 @@
 package com.project.ece651.webapp.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.project.ece651.webapp.entities.ApartmentEntity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 // DTO: data transfer object
 public class UserDto extends MsgResponse implements Serializable {
@@ -29,6 +33,11 @@ public class UserDto extends MsgResponse implements Serializable {
     private String password;
 
     private String encryptedPassword;
+
+    private List<ApartmentDto> ownedApartments = new ArrayList<>();
+
+    // @JsonIgnoreProperties("users")
+    private List<ApartmentDto> favoriteApartments = new ArrayList<>();
 
     public String getUid() {
         return uid;
@@ -76,5 +85,21 @@ public class UserDto extends MsgResponse implements Serializable {
 
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
+    }
+
+    public List<ApartmentDto> getOwnedApartments() {
+        return ownedApartments;
+    }
+
+    public void setOwnedApartments(List<ApartmentDto> ownedApartments) {
+        this.ownedApartments = ownedApartments;
+    }
+
+    public List<ApartmentDto> getFavoriteApartments() {
+        return favoriteApartments;
+    }
+
+    public void setFavoriteApartments(List<ApartmentDto> favoriteApartments) {
+        this.favoriteApartments = favoriteApartments;
     }
 }

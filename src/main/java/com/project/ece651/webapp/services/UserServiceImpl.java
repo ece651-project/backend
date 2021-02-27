@@ -1,5 +1,6 @@
 package com.project.ece651.webapp.services;
 
+import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.shared.UserDto;
@@ -88,5 +89,29 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String uid) {
         UserEntity userToDelete = userRepository.findByUid(uid);
         userRepository.delete(userToDelete);
+    }
+
+    public void addFav(String uid, ApartmentEntity apartment) {
+        // Logic is similar to updateUser
+        // Obtain the original user in the database
+        UserEntity originalUser = userRepository.findByUid(uid);
+
+        // Add an apartment
+        originalUser.addFavoriteApartments(apartment);
+
+        // Save the updated data
+        userRepository.save(originalUser);
+    }
+
+    public void delFav(String uid, ApartmentEntity apartment) {
+        // Logic is similar to updateUser
+        // Obtain the original user in the database
+        UserEntity originalUser = userRepository.findByUid(uid);
+
+        // Add an apartment
+        originalUser.delFavoriteApartments(apartment);
+
+        // Save the updated data
+        userRepository.save(originalUser);
     }
 }

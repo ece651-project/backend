@@ -5,6 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Cascade: https://www.baeldung.com/jpa-cascade-types
+ */
+
 @Entity
 @Table(name = "user")
 public class UserEntity implements Serializable{
@@ -34,12 +38,12 @@ public class UserEntity implements Serializable{
     private String encryptedPassword;
 
     // TODO: list or set? If set, add equals() and hashCode().
-    @OneToMany(mappedBy = "landlord", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "landlord", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ApartmentEntity> ownedApartments = new ArrayList<>();
 
     // TODO: list or set?
     // TODO: single-side or double-side relation? Does the apartment need to know its collectors? Curr is single-side.
-    @ManyToMany(fetch = FetchType.EAGER)    // TODO: consider the FetchType
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)    // TODO: consider the FetchType
     @JoinTable(name = "favorite_apartment",
             joinColumns = {@JoinColumn(name = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "aid")})
@@ -103,4 +107,21 @@ public class UserEntity implements Serializable{
         return this;
     }
 
+    public List<ApartmentEntity> getFavoriteApartments() {
+        return favoriteApartments;
+    }
+
+    public UserEntity addFavoriteApartments(ApartmentEntity favoriteApartment) {
+        if (!this.favoriteApartments.contains(favoriteApartment)) {
+            this.favoriteApartments.add(favoriteApartment);
+        }
+        return this;
+    }
+
+    public UserEntity delFavoriteApartments(ApartmentEntity favoriteApartment) {
+        if (this.favoriteApartments.contains(favoriteApartment)) {
+            this.favoriteApartments.remove(favoriteApartment);
+        }
+        return this;
+    }
 }
