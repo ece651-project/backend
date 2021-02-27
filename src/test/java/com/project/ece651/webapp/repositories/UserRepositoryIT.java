@@ -19,6 +19,10 @@ import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/* @ActiveProfiles is a class-level annotation that is used to activate profiles
+ * while loading ApplicationContext in Spring integration test.
+ * https://www.concretepage.com/spring-5/activeprofiles-example-spring-test
+ */
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles("test")
