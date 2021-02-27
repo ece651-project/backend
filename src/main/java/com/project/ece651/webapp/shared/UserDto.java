@@ -1,5 +1,6 @@
 package com.project.ece651.webapp.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.project.ece651.webapp.entities.ApartmentEntity;
 
@@ -35,6 +36,7 @@ public class UserDto extends MsgResponse implements Serializable {
 
     private List<ApartmentEntity> ownedApartments = new ArrayList<>();
 
+    @JsonIgnoreProperties("users")
     private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
 
     public String getUid() {

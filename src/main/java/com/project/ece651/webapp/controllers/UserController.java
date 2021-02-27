@@ -288,7 +288,13 @@ public class UserController {
         }
 
         /* this is wrong when single-side many-to-many: Infinite recursion (StackOverflowError) (through reference chain) */
-        return jsonMapper.writeValueAsString(userFound.getFavoriteApartments());
+        List<ApartmentEntity> apartments = userFound.getFavoriteApartments();
+
+        List<ApartmentDto> apartmentDtos = apartments.stream()
+                .map(apartmentEntity -> modelMapper.map(apartmentEntity, ApartmentDto.class))
+                .collect(Collectors.toList());
+
+        return jsonMapper.writeValueAsString(apartmentDtos);
     }
 }
 
