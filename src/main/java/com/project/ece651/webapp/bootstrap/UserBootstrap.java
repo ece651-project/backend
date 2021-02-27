@@ -10,8 +10,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/* marked with @Profile to limit when it is loaded
+ * https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html
+ */
 @Component
-@Profile("dev")    // https://docs.spring.io/spring-boot/docs/1.2.0.M1/reference/html/boot-features-profiles.html
+@Profile("dev")
 public class UserBootstrap implements ApplicationListener<ContextRefreshedEvent> {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
