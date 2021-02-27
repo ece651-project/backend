@@ -82,7 +82,7 @@ public class ApartmentController {
 
     @DeleteMapping("/delete_apt/{uid}/{aid}")
     @ResponseStatus(HttpStatus.OK)
-    public MsgDto deleteApartment(@PathVariable long uid, @PathVariable long aid) {
+    public MsgDto deleteApartment(@PathVariable String uid, @PathVariable long aid) {
         // sample url localhost:8080/apt/delete_apt/12601d30-b1f6-448f-b3bc-a9acc4802ad8/1
         // add one new apartment according to the given apartment information
         MsgDto response = new MsgDto();
@@ -90,7 +90,7 @@ public class ApartmentController {
         ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
         if (apartmentEntity != null) {
             UserEntity landlord = apartmentEntity.getLandlord();
-            if (landlord.getId() != uid) {
+            if (!landlord.getUid().equals(uid)) {
                 // the user has not right to do the delete case
                 response.setSuccess(false);
                 response.setResponseMsg("User must be the corresponding landlord to delete apartment(s)");
