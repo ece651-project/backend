@@ -277,7 +277,7 @@ public class UserController {
         return jsonMapper.writeValueAsString(new MsgResponse(true, returnMsg));
     }
 
-    @DeleteMapping("get_fav//{uid}")
+    @GetMapping("/get_fav/{uid}")
     @ResponseBody
     public String getFavs(@PathVariable String uid) throws JsonProcessingException {
         // Check if the user exists
@@ -287,9 +287,8 @@ public class UserController {
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
 
-        /* this is wrong: Infinite recursion (StackOverflowError) (through reference chain) */
-        // return jsonMapper.writeValueAsString(userFound.getFavoriteApartments());
+        /* this is wrong when single-side many-to-many: Infinite recursion (StackOverflowError) (through reference chain) */
+        return jsonMapper.writeValueAsString(userFound.getFavoriteApartments());
     }
-
 }
 

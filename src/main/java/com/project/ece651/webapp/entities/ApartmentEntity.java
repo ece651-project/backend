@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "apartment")
@@ -55,6 +56,9 @@ public class ApartmentEntity implements Serializable {
 
     @Column(nullable=false)
     private int price;
+
+    @ManyToMany(mappedBy = "favoriteApartments")
+    private List<UserEntity> users;
 
     public long getAid() {
         return aid;
@@ -126,5 +130,13 @@ public class ApartmentEntity implements Serializable {
 
     public void setEndMonth(Date endMonth) {
         this.endMonth = endMonth;
+    }
+
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 }
