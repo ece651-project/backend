@@ -276,5 +276,20 @@ public class UserController {
         String returnMsg = "Favourite apartment deleted for user " + uid + ".";
         return jsonMapper.writeValueAsString(new MsgResponse(true, returnMsg));
     }
+
+    @DeleteMapping("get_fav//{uid}")
+    @ResponseBody
+    public String getFavs(@PathVariable String uid) throws JsonProcessingException {
+        // Check if the user exists
+        UserDto userFound = userService.findByUid(uid);
+        if (userFound == null) {
+            String errMsg = "User not found.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        /* this is wrong: Infinite recursion (StackOverflowError) (through reference chain) */
+        // return jsonMapper.writeValueAsString(userFound.getFavoriteApartments());
+    }
+
 }
 
