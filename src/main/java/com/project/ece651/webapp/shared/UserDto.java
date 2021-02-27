@@ -37,7 +37,7 @@ public class UserDto extends MsgResponse implements Serializable {
     private List<ApartmentEntity> ownedApartments = new ArrayList<>();
 
     // @JsonIgnoreProperties("users")
-    private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
+    private List<ApartmentDto> favoriteApartments = new ArrayList<>();
 
     public String getUid() {
         return uid;
@@ -95,11 +95,11 @@ public class UserDto extends MsgResponse implements Serializable {
         this.ownedApartments = ownedApartments;
     }
 
-    public List<ApartmentEntity> getFavoriteApartments() {
+    public List<ApartmentDto> getFavoriteApartments() {
         return favoriteApartments;
     }
 
-    public void setFavoriteApartments(List<ApartmentEntity> favoriteApartments) {
+    public void setFavoriteApartments(List<ApartmentDto> favoriteApartments) {
         this.favoriteApartments = favoriteApartments;
     }
 }
