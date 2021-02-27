@@ -34,7 +34,7 @@ public class UserDto extends MsgResponse implements Serializable {
 
     private String encryptedPassword;
 
-    private List<ApartmentEntity> ownedApartments = new ArrayList<>();
+    private List<ApartmentDto> ownedApartments = new ArrayList<>();
 
     // @JsonIgnoreProperties("users")
     private List<ApartmentDto> favoriteApartments = new ArrayList<>();
@@ -87,11 +87,11 @@ public class UserDto extends MsgResponse implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public List<ApartmentEntity> getOwnedApartments() {
+    public List<ApartmentDto> getOwnedApartments() {
         return ownedApartments;
     }
 
-    public void setOwnedApartments(List<ApartmentEntity> ownedApartments) {
+    public void setOwnedApartments(List<ApartmentDto> ownedApartments) {
         this.ownedApartments = ownedApartments;
     }
 
