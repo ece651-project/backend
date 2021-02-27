@@ -105,6 +105,8 @@ class ApartmentRepositoryIT {
     // TODO: add tests
     @Test
     void testFindAll() {
+        UserEntity user = userRepository.findByUid(DEFAULT_USER_ID);
+
         // Two apartment/house info
         String a1_address = "a1 address";
         Timestamp a1_uploadTime = new Timestamp(999999998);
@@ -122,20 +124,23 @@ class ApartmentRepositoryIT {
         a1.setUploadTime(a1_uploadTime);
         a1.setDescription(a1_desc);
         a1.setPrice(a1_price);
+        user.addOwnedApartments(a1);
+        userRepository.save(user);
 
         ApartmentEntity h1 = new ApartmentEntity();
         h1.setAddress(h1_address);
         h1.setUploadTime(h1_uploadTime);
         h1.setDescription(h1_desc);
         h1.setPrice(h1_price);
+        user.addOwnedApartments(h1);
+        userRepository.save(user);
 
-        // Add apartments
-        apartmentRepository.save(a1);
-        apartmentRepository.save(h1);
+//        // Add apartments // if nct annotate it, add twice due to Cascade.ALL (set makes more sense than list)
+//        apartmentRepository.save(a1);
+//        apartmentRepository.save(h1);
 
         List<ApartmentEntity> apartments = apartmentRepository.findAll();
 
         assertEquals(apartments.size(), 2);
-        assertNotEquals(apartments.size(), 3);
     }
 }

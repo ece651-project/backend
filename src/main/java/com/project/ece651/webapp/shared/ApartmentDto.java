@@ -1,26 +1,45 @@
 package com.project.ece651.webapp.shared;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.project.ece651.webapp.entities.Type;
+import com.project.ece651.webapp.entities.UserEntity;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 // data transfer object that contains all information to be conveyed about a typical apartment entity
 // extend MsgDto to support an error message (will be useful when the query fails)
 public class ApartmentDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
+
     private long aid;
+
+    // to avoid infinite recursion:
+    // https://stackoverflow.com/questions/3325387/infinite-recursion-with-jackson-json-and-hibernate-jpa-issue
+    @JsonIgnoreProperties("ownedApartments")
     private String landlordId;
+
     private Type type;
+
     private String address;
+
     private Timestamp uploadTime;
+
     @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
     private Date startMonth;
+
     @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
     private Date endMonth;
+
     private String description;
+
     private int price;
+
+//    @JsonIgnoreProperties("favoriteApartments")
+//    private List<UserEntity> users;
 
     public long getAid() {
         return aid;

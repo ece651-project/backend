@@ -1,5 +1,6 @@
 package com.project.ece651.webapp.shared;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.project.ece651.webapp.entities.ApartmentEntity;
 
@@ -33,9 +34,10 @@ public class UserDto extends MsgResponse implements Serializable {
 
     private String encryptedPassword;
 
-    private List<ApartmentEntity> ownedApartments = new ArrayList<>();
+    private List<ApartmentDto> ownedApartments = new ArrayList<>();
 
-    private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
+    // @JsonIgnoreProperties("users")
+    private List<ApartmentDto> favoriteApartments = new ArrayList<>();
 
     public String getUid() {
         return uid;
@@ -85,19 +87,19 @@ public class UserDto extends MsgResponse implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public List<ApartmentEntity> getOwnedApartments() {
+    public List<ApartmentDto> getOwnedApartments() {
         return ownedApartments;
     }
 
-    public void setOwnedApartments(List<ApartmentEntity> ownedApartments) {
+    public void setOwnedApartments(List<ApartmentDto> ownedApartments) {
         this.ownedApartments = ownedApartments;
     }
 
-    public List<ApartmentEntity> getFavoriteApartments() {
+    public List<ApartmentDto> getFavoriteApartments() {
         return favoriteApartments;
     }
 
-    public void setFavoriteApartments(List<ApartmentEntity> favoriteApartments) {
+    public void setFavoriteApartments(List<ApartmentDto> favoriteApartments) {
         this.favoriteApartments = favoriteApartments;
     }
 }
