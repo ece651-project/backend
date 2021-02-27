@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -43,24 +44,6 @@ public class UserServiceImpl implements UserService {
 
         return modelMapper.map(userEntity, UserDto.class);
     }
-
-    /* for login
-     * email is treated as the username
-     * override method of UserDetailsService interface
-     */
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        UserEntity userEntity = userRepository.findByEmail(email);
-//
-//        if (userEntity == null) {
-//            throw new UsernameNotFoundException(email + ": User not found");
-//        }
-//
-//        // User class is from Spring Security: first 2 paras are username and password
-//        // the last para authorities is not used, so pass in an empty list
-//        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(),
-//                true, true, true, true, new ArrayList<>());
-//    }
 
     public UserDto findByUid(String userId) {
         UserEntity userEntity = userRepository.findByUid(userId);

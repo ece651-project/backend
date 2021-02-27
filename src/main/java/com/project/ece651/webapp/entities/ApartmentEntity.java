@@ -20,6 +20,7 @@ public class ApartmentEntity implements Serializable {
     @ManyToOne
     private UserEntity landlord;
 
+    @Column(name = "apt_type")  // type is a keyword
     @Enumerated(value = EnumType.STRING)
     private Type type;
 

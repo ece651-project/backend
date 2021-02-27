@@ -3,7 +3,9 @@ package com.project.ece651.webapp.utils;
 import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.Type;
 import com.project.ece651.webapp.entities.UserEntity;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
 public class ApartmentTestUtils {
     public static final Type DEFAULT_APARTMENT_TYPE = Type.APARTMENT;
     public static final String DEFAULT_APARTMENT_ADDRESS = "Default apartment address";
