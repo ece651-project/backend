@@ -7,8 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Iterator;
@@ -17,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@ActiveProfiles("test")
+//@AutoConfigureTestDatabase(replace = none)
 class UserRepositoryIT {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -35,7 +41,8 @@ class UserRepositoryIT {
      Therefore, it does not need to rollback the database transactions.
      */
     @Test
-    void findByUserId() {
+    @Transactional
+    void testFindByUid() {
         String userId = transactionTemplate.execute((ts) -> {
             UserEntity userEntity = new UserEntity();
 
@@ -54,7 +61,6 @@ class UserRepositoryIT {
         transactionTemplate.execute((ts) -> {
             UserEntity resultUserEntity = userRepository.findByUid(userId);
 
-            assertEquals(1L, resultUserEntity.getId());
             assertEquals(userId, resultUserEntity.getUid());
             assertEquals("David", resultUserEntity.getNickname());
             assertEquals("david@126.com", resultUserEntity.getEmail());
@@ -135,7 +141,7 @@ class UserRepositoryIT {
     }
 
     @Test
-    void testFindByNickName() {
+    void testFindByNickname() {
         // User info
         String uid = "00000";
         String email = "tempUser@125.com";

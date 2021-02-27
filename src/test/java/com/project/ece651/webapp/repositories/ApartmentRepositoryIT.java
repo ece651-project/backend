@@ -1,7 +1,6 @@
 package com.project.ece651.webapp.repositories;
 
 import com.project.ece651.webapp.entities.ApartmentEntity;
-import com.project.ece651.webapp.entities.Type;
 import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.utils.ApartmentTestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,27 +10,33 @@ import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.sql.Timestamp;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@ActiveProfiles("test")
 class ApartmentRepositoryIT {
     Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ApartmentRepository apartmentRepository;
+
     @Autowired
     private TransactionTemplate transactionTemplate;
 
     private static final String DEFAULT_USER_ID = "12345";
+
     @BeforeEach
     void setUp() {
         // making sure at least one user is in the database
