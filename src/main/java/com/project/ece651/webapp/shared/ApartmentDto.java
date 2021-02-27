@@ -14,21 +14,32 @@ import java.util.List;
 // extend MsgDto to support an error message (will be useful when the query fails)
 public class ApartmentDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
+
     private long aid;
+
+    // to avoid infinite recursion:
+    // https://stackoverflow.com/questions/3325387/infinite-recursion-with-jackson-json-and-hibernate-jpa-issue
     @JsonIgnoreProperties("ownedApartments")
     private String landlordId;
+
     private Type type;
+
     private String address;
+
     private Timestamp uploadTime;
+
     @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
     private Date startMonth;
+
     @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
     private Date endMonth;
+
     private String description;
+
     private int price;
 
-    @JsonIgnoreProperties("favoriteApartments")
-    private List<UserEntity> users;
+//    @JsonIgnoreProperties("favoriteApartments")
+//    private List<UserEntity> users;
 
     public long getAid() {
         return aid;

@@ -36,7 +36,7 @@ public class UserDto extends MsgResponse implements Serializable {
 
     private List<ApartmentEntity> ownedApartments = new ArrayList<>();
 
-    @JsonIgnoreProperties("users")
+    // @JsonIgnoreProperties("users")
     private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
 
     public String getUid() {
