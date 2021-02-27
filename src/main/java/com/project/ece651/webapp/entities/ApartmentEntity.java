@@ -18,7 +18,7 @@ public class ApartmentEntity implements Serializable {
     // Default AUTO is also ok.
     private long aid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private UserEntity landlord;
 
     //@Column(name = "apt_type")  // type is a keyword in MySQL
