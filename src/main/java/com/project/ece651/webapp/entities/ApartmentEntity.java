@@ -51,7 +51,7 @@ public class ApartmentEntity implements Serializable {
         List<ImageEntity> images
         ImageEntity:
             @Lob    //BLOB field inside db
-            private Byte[] image;
+            private Byte[] data;
      */
 
     @Column(nullable=false)
