@@ -4,16 +4,20 @@ import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.ApartmentRepository;
 import com.project.ece651.webapp.repositories.UserRepository;
+import com.project.ece651.webapp.services.ImageService;
 import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgDto;
 import com.project.ece651.webapp.utils.ApartmentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
+// reference https://www.callicoder.com/spring-boot-file-upload-download-jpa-hibernate-mysql-database-example/
+// for image uploading, downloading and storing in database
 
 @RestController
 @RequestMapping("/apt")
@@ -22,6 +26,8 @@ public class ApartmentController {
     private ApartmentRepository apartmentRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ImageService imageServiceImpl;
     /*
         Example request body:
         {
@@ -131,4 +137,41 @@ public class ApartmentController {
         ApartmentDto apartmentDto = ApartmentUtils.apartmentEntityToDto(apartmentEntity);
         return apartmentDto;
     }
+
+    // experiment with images files
+    // should by no means be included in the released code
+    @PostMapping("/add_apt_imgs/{uid}/{aid}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MsgDto addApartmentImgs(@PathVariable String uid, @PathVariable long aid, @RequestParam("images") MultipartFile[] images) {
+        // sample url localhost:8080/apt/add_apt_with_imgs/12601d30-b1f6-448f-b3bc-a9acc4802ad8/1
+        MsgDto response = new MsgDto();
+        // check whether the apartment is in the database
+        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+        if (apartmentEntity != null) {
+            UserEntity landlord = apartmentEntity.getLandlord();
+            if (!landlord.getUid().equals(uid)) {
+                // the user has not right to do the delete case
+                response.setSuccess(false);
+                response.setResponseMsg("User must be the corresponding landlord to delete apartment(s)");
+                return response;
+            }
+            try {
+                imageServiceImpl.storeImages(apartmentEntity, images);
+            }
+            catch (Exception e) {
+                response.setSuccess(false);
+                response.setResponseMsg("Image added to apartment error case");
+                return response;
+            }
+        }
+        else {
+            // apartment not in the database case
+            response.setSuccess(false);
+            response.setResponseMsg("Apartment not in database!");
+        }
+        return response;
+    }
+
+
+
 }

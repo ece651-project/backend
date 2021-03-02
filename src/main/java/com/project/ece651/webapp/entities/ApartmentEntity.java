@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -53,6 +54,8 @@ public class ApartmentEntity implements Serializable {
             @Lob    //BLOB field inside db
             private Byte[] data;
      */
+    @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImageEntity> images = new ArrayList<>();
 
     @Column(nullable=false)
     private int price;
@@ -130,5 +133,19 @@ public class ApartmentEntity implements Serializable {
 
     public void setEndMonth(Date endMonth) {
         this.endMonth = endMonth;
+    }
+
+    public List<ImageEntity> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
+    }
+
+    public ApartmentEntity addImage(ImageEntity imageEntity) {
+        this.images.add(imageEntity);
+        imageEntity.setApartment(this);
+        return this;
     }
 }

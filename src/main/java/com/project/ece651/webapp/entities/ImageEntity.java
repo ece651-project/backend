@@ -13,8 +13,8 @@ public class ImageEntity {
     // Default AUTO is also ok.
     private long imageId;
 
-    @Column(nullable=false)
-    private String imageName;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    private ApartmentEntity apartment;
 
     @Column(nullable=false)
     private String imageType;
@@ -22,12 +22,20 @@ public class ImageEntity {
     @Lob
     private byte[] data;
 
-    public ImageEntity(String imageName, String imageType, byte[] data) {
-        this.imageName = imageName;
+    protected ImageEntity() {}
+
+    public ImageEntity(String imageType, byte[] data) {
         this.imageType = imageType;
         this.data = data;
     }
 
+    public ApartmentEntity getApartment() {
+        return apartment;
+    }
+
+    public void setApartment(ApartmentEntity apartment) {
+        this.apartment = apartment;
+    }
 
     public long getImageId() {
         return imageId;
@@ -35,14 +43,6 @@ public class ImageEntity {
 
     public void setImageId(long imageId) {
         this.imageId = imageId;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
     }
 
     public String getImageType() {
