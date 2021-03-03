@@ -23,10 +23,6 @@ import java.util.List;
 @RequestMapping("/apt")
 public class ApartmentController {
     @Autowired
-    private ApartmentRepository apartmentRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private ApartmentService apartmentServiceImpl;
 
     /*
@@ -120,7 +116,5 @@ public class ApartmentController {
         }
         return response;
     }
-
-
 
 }
