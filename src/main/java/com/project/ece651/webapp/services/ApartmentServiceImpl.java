@@ -21,12 +21,14 @@ import java.util.List;
 
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
-    @Autowired
+
     private UserRepository userRepository;
-    @Autowired
     private ApartmentRepository apartmentRepository;
-    @Autowired
-    private ImageRepository imageRepository;
+
+    public ApartmentServiceImpl(UserRepository userRepository, ApartmentRepository apartmentRepository) {
+        this.userRepository = userRepository;
+        this.apartmentRepository = apartmentRepository;
+    }
 
     @Override
     public void addApartment(ApartmentDto apartmentDto) throws UserNotFoundException {

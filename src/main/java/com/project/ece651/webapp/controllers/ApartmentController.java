@@ -22,8 +22,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/apt")
 public class ApartmentController {
-    @Autowired
+
     private ApartmentService apartmentServiceImpl;
+
+    public ApartmentController(ApartmentService apartmentServiceImpl) {
+        this.apartmentServiceImpl = apartmentServiceImpl;
+    }
 
     /*
         Example request body:
