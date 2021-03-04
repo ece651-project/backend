@@ -7,11 +7,9 @@ import com.project.ece651.webapp.exceptions.ActionNotAllowedException;
 import com.project.ece651.webapp.exceptions.ApartmentNotFoundException;
 import com.project.ece651.webapp.exceptions.UserNotFoundException;
 import com.project.ece651.webapp.repositories.ApartmentRepository;
-import com.project.ece651.webapp.repositories.ImageRepository;
 import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.utils.ApartmentUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
