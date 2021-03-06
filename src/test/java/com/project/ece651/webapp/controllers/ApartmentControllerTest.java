@@ -1,6 +1,10 @@
 package com.project.ece651.webapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.ece651.webapp.entities.UserEntity;
+import com.project.ece651.webapp.exceptions.ActionNotAllowedException;
+import com.project.ece651.webapp.exceptions.ApartmentNotFoundException;
+import com.project.ece651.webapp.exceptions.UserNotFoundException;
 import com.project.ece651.webapp.services.ApartmentService;
 import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgDto;
@@ -10,12 +14,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.springframework.http.MediaType;
@@ -39,11 +41,13 @@ public class ApartmentControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(apartmentController).build();
     }
 
+    /* ------------------ createApartment() tests ---------------------- */
     @Test
     void testCreateApartmentSuccess() throws Exception {
-        ApartmentDto apartmentDto = new ApartmentDto();
-        // in JSON format: the content does not matter, but could not be empty.
-        String apartmentRequestBody = "{}";
+        // mock behavior
+        doNothing().when(apartmentService).addApartment(any());
+        // in JSON format
+        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
         String response = mockMvc.perform(post("/apt/add_apt")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(apartmentRequestBody)
@@ -52,35 +56,119 @@ public class ApartmentControllerTest {
                 .andReturn().getResponse().getContentAsString();
         MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
         assertTrue(msgDto.isSuccess());
-
-
-
-
-
-//        UserDto userDto = new UserDto();
-//        String expectedUid = "0d2adfec-1ce9-483c-a1e7-59d31df";
-//        userDto.setUid(expectedUid);
-//
-//        when(userService.addUser(any())).thenReturn(userDto);
-//
-//        // in JSON format: the content does not matter, but could not be empty.
-//        String userRequestBody = "{\"email\":\"bbbbbb@163.com\"}";
-//
-//        String response = mockMvc.perform(post("/user/add_user")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(userRequestBody)
-//        )
-//                .andExpect(status().is2xxSuccessful())
-//                .andReturn().getResponse().getContentAsString();
-//        // should be {"success":true,"msg":"Successfully created the user.","uid":"0d2adfec-1ce9-483c-a1e7-59d31df"}
-//
-//        UserDto responseDto = jsonMapper
-//                .readerWithView(UserDto.AddView.class)
-//                .readValue(response, UserDto.class);
-//
-//        assertTrue(responseDto.isSuccess());
-//        assertEquals("Successfully created the user.", responseDto.getMsg());
-//        assertEquals(expectedUid, responseDto.getUid());
     }
 
+    @Test
+    void testCreateApartmentNotFound() throws Exception {
+        // mock behavior
+        doThrow(UserNotFoundException.class).when(apartmentService).addApartment(any());
+        // in JSON format
+        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
+        String response = mockMvc.perform(post("/apt/add_apt")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(apartmentRequestBody)
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
+        assertFalse(msgDto.isSuccess());
+    }
+
+    /* ------------------ updateApartment() tests ---------------------- */
+    @Test
+    void testUpdateApartmentSuccess() throws Exception {
+        long expectedAid = 1;
+        // mock behavior
+        doNothing().when(apartmentService).updateApartment(eq(expectedAid), any());
+        // in JSON format
+        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
+        String response = mockMvc.perform(put("/apt/update_apt/" + expectedAid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(apartmentRequestBody)
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
+        assertTrue(msgDto.isSuccess());
+    }
+
+    @Test
+    void testUpdateApartmentNotFound() throws Exception {
+        long expectedAid = 1;
+        // mock behavior
+        String msg = "Apartment to be updated not in database";
+        doThrow(new ApartmentNotFoundException(msg)).when(apartmentService).updateApartment(eq(expectedAid), any());
+        // in JSON format
+        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
+        String response = mockMvc.perform(put("/apt/update_apt/" + expectedAid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(apartmentRequestBody)
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
+        assertFalse(msgDto.isSuccess());
+        assertEquals(msg, msgDto.getResponseMsg());
+    }
+
+    /* ------------------ deleteApartment() tests ---------------------- */
+    @Test
+    void testDeleteApartmentSuccess() throws Exception {
+        String expectedUid = "111222333";
+        long expectedAid = 1;
+        // mock behavior
+        doNothing().when(apartmentService).deleteApartment(eq(expectedUid), eq(expectedAid));
+        // in JSON format
+        String apartmentRequestBody = "";
+        String response = mockMvc.perform(delete("/apt/delete_apt/" + expectedUid + "/" + expectedAid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(apartmentRequestBody)
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
+        assertTrue(msgDto.isSuccess());
+    }
+
+    @Test
+    void testDeleteApartmentNotFound() throws Exception {
+        String expectedUid = "111222333";
+        long expectedAid = -1;
+        // mock behavior
+        String msg = "Apartment to be deleted not in database";
+        doThrow(new ApartmentNotFoundException(msg)).when(apartmentService).
+                deleteApartment(any(), eq(expectedAid));
+        // in JSON format
+        String apartmentRequestBody = "";
+        String response = mockMvc.perform(delete("/apt/delete_apt/" + expectedUid + "/" + expectedAid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(apartmentRequestBody)
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
+        assertFalse(msgDto.isSuccess());
+        assertEquals(msg, msgDto.getResponseMsg());
+    }
+
+    @Test
+    void testDeleteApartmentNoRight() throws Exception {
+        String expectedUid = "111222333";
+        long expectedAid = 1;
+        // mock behavior
+        String msg = "User other than landlord has not right to perform the delete";
+        doThrow(new ActionNotAllowedException(msg)).when(apartmentService).
+                deleteApartment(any(), eq(expectedAid));
+        // in JSON format
+        String apartmentRequestBody = "";
+        String response = mockMvc.perform(delete("/apt/delete_apt/" + expectedUid + "/" + expectedAid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(apartmentRequestBody)
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
+        assertFalse(msgDto.isSuccess());
+        assertEquals(msg, msgDto.getResponseMsg());
+    }
 }
