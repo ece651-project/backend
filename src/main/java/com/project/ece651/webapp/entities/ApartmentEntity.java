@@ -60,8 +60,11 @@ public class ApartmentEntity implements Serializable {
     @Column(nullable=false)
     private int price;
 
-//    @ManyToMany(mappedBy = "favoriteApartments")
-//    private List<UserEntity> users;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)    // TODO: consider the FetchType
+    @JoinTable(name = "favorite_apartment",
+            joinColumns = {@JoinColumn(name = "aid")},
+            inverseJoinColumns = {@JoinColumn(name = "uid")})
+    private List<ApartmentEntity> favoriteApartments = new ArrayList<>();
 
     public long getAid() {
         return aid;
