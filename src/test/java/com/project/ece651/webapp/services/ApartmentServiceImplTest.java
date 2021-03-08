@@ -81,10 +81,16 @@ public class ApartmentServiceImplTest {
     @Test
     void updateApartmentSuccessTest() {
         long aid = 1;
+        String expectedLandlordId = "11111111111111";
         // mock behaviour
-        when(apartmentRepository.findByAid(aid)).thenReturn(new ApartmentEntity());
+        ApartmentEntity originalEntity = new ApartmentEntity();
+        UserEntity landlord = new UserEntity();
+        landlord.setUid(expectedLandlordId);
+        originalEntity.setLandlord(landlord);
+        when(apartmentRepository.findByAid(aid)).thenReturn(originalEntity);
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
+        apartmentDto.setLandlordId(expectedLandlordId);
         apartmentDto.setAid(aid);
         apartmentDto.setType(Type.APARTMENT);
         apartmentDto.setAddress(null);
@@ -92,7 +98,6 @@ public class ApartmentServiceImplTest {
         apartmentDto.setEndMonth(null);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
-        apartmentDto.setLandlordId("123");
         // when
         apartmentService.updateApartment(aid, apartmentDto);
         // no exception should be throw
@@ -101,10 +106,12 @@ public class ApartmentServiceImplTest {
     @Test
     void updateApartmentNotExistTest() {
         long aid = 1;
+        String expectedLandlordId = "11111111111111";
         // mock behaviour
         when(apartmentRepository.findByAid(aid)).thenReturn(null);
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
+        apartmentDto.setLandlordId(expectedLandlordId);
         apartmentDto.setAid(aid);
         apartmentDto.setType(Type.APARTMENT);
         apartmentDto.setAddress(null);
@@ -112,9 +119,35 @@ public class ApartmentServiceImplTest {
         apartmentDto.setEndMonth(null);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
-        apartmentDto.setLandlordId("123");
         // an ApartmentNotFound Exception is expected
         assertThrows(ApartmentNotFoundException.class,
+                ()-> {
+                    apartmentService.updateApartment(aid, apartmentDto);
+                });
+    }
+
+    @Test
+    void updateApartmentNoRightTest() {
+        long aid = 1;
+        String expectedLandlordId = "11111111111111";
+        // mock behaviour
+        ApartmentEntity originalEntity = new ApartmentEntity();
+        UserEntity landlord = new UserEntity();
+        landlord.setUid(expectedLandlordId);
+        originalEntity.setLandlord(landlord);
+        when(apartmentRepository.findByAid(aid)).thenReturn(originalEntity);
+        // given
+        ApartmentDto apartmentDto = new ApartmentDto();
+        apartmentDto.setLandlordId(expectedLandlordId + "PLACE HOLDER");
+        apartmentDto.setAid(aid);
+        apartmentDto.setType(Type.APARTMENT);
+        apartmentDto.setAddress(null);
+        apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
+        apartmentDto.setEndMonth(null);
+        apartmentDto.setDescription("Empty description");
+        apartmentDto.setPrice(500);
+        // an ApartmentNotFound Exception is expected
+        assertThrows(ActionNotAllowedException.class,
                 ()-> {
                     apartmentService.updateApartment(aid, apartmentDto);
                 });
