@@ -117,13 +117,14 @@ public class UserController {
             String errMsg = "Json processing error.";
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         } catch (Exception e) {
+            e.printStackTrace();
 
             // Assumes that other constrains including length and email format have been checked by frontend
             // only consider uniqueness here
             String errMsg = e.getMessage();
-            if (errMsg.contains("EMAIL")) {
+            if (errMsg.contains("unique_email")) {
                 errMsg = "You have already signed up an account with this email!";
-            } else if (errMsg.contains("NICKNAME")) {
+            } else if (errMsg.contains("unique_nickname")) {
                 errMsg = "This nickname has already been used! Please Change another one!";
             }
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
