@@ -7,10 +7,22 @@ import java.util.List;
 
 /*
  * Cascade: https://www.baeldung.com/jpa-cascade-types
+ * Naming the constraints:
+ *  1. https://stackoverflow.com/questions/15372654/uniqueconstraint-and-columnunique-true-in-hibernate-annotation
+ *  2. https://stackoverflow.com/questions/23635633/renaming-uniqueconstraint-doesnt-work
  */
 
 @Entity
-@Table(name = "user")
+@Table(name = "user",
+        uniqueConstraints = {   // to distinguish from repetitive email and nickname error when adding users
+        @UniqueConstraint(
+                columnNames = "email",
+                name="unique_email"
+        ), @UniqueConstraint(
+                columnNames = "nickname",
+                name="unique_nickname"
+        )
+})
 public class UserEntity implements Serializable{
     // not necessary, but preferable
     private static final long serialVersionUID = 4315090579219428812L;
@@ -24,10 +36,10 @@ public class UserEntity implements Serializable{
     @Column(nullable=false, unique=true)
     private String uid;
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(name = "email", nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 50, unique = true)
+    @Column(name = "nickname", nullable = false, length = 50)
     private String nickname;
 
     // TODO: maybe another specialized constraint for phone number
