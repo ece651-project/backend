@@ -49,11 +49,16 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException {
         ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
         if (apartmentEntity != null) {
+            // apartment in database case
+            // check whether the user has right to do the updating
+            if (!apartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid()))
+                throw new ActionNotAllowedException("User other than landlord has no right to perform the update");
             // update the apartment and persist to database
             ApartmentUtils.apartmentDtoToEntity(apartmentDto, apartmentEntity);
             apartmentRepository.save(apartmentEntity);
         }
         else {
+            // apartment not found case
             throw new ApartmentNotFoundException("Apartment to be updated not in database");
         }
     }
@@ -65,7 +70,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             UserEntity landlord = apartmentEntity.getLandlord();
             if (!landlord.getUid().equals(uid)) {
                 // the user has not right to do the delete case
-                throw new ActionNotAllowedException("User other than landlord has not right to perform the delete");
+                throw new ActionNotAllowedException("User other than landlord has no right to perform the delete");
             }
             landlord.getOwnedApartments().remove(apartmentEntity);
             userRepository.save(landlord);

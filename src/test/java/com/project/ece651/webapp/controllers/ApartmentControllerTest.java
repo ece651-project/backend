@@ -111,6 +111,25 @@ public class ApartmentControllerTest {
         assertEquals(msg, msgDto.getResponseMsg());
     }
 
+    @Test
+    void testUpdateApartmentNoRight() throws Exception {
+        long expectedAid = 1;
+        // mock behavior
+        String msg = "Apartment to be updated not in database";
+        doThrow(new ActionNotAllowedException(msg)).when(apartmentService).updateApartment(eq(expectedAid), any());
+        // in JSON format
+        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
+        String response = mockMvc.perform(put("/apt/update_apt/" + expectedAid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(apartmentRequestBody)
+        )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn().getResponse().getContentAsString();
+        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
+        assertFalse(msgDto.isSuccess());
+        assertEquals(msg, msgDto.getResponseMsg());
+    }
+
     /* ------------------ deleteApartment() tests ---------------------- */
     @Test
     void testDeleteApartmentSuccess() throws Exception {
