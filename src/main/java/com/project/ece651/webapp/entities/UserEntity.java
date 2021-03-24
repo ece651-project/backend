@@ -55,7 +55,7 @@ public class UserEntity implements Serializable{
 
     // TODO: list or set?
     // TODO: single-side or double-side relation? Does the apartment need to know its collectors? Curr is single-side.
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)    // TODO: consider the FetchType
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)    // TODO: consider the FetchType
     @JoinTable(name = "favorite_apartment",
             joinColumns = {@JoinColumn(name = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "aid")})
