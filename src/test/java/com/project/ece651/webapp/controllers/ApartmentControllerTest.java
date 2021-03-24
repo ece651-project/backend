@@ -1,15 +1,12 @@
 package com.project.ece651.webapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.exceptions.ActionNotAllowedException;
 import com.project.ece651.webapp.exceptions.ApartmentNotFoundException;
 import com.project.ece651.webapp.exceptions.UserNotFoundException;
 import com.project.ece651.webapp.services.ApartmentService;
-import com.project.ece651.webapp.shared.ApartmentDto;
+import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.MsgDto;
-import com.project.ece651.webapp.shared.MsgResponse;
-import com.project.ece651.webapp.shared.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,6 +17,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,16 +28,23 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 public class ApartmentControllerTest {
     @Mock
     ApartmentService apartmentService;
+
+    @Mock
+    UserService userService;
+
     MockMvc mockMvc;
     ObjectMapper jsonMapper;
     ApartmentController apartmentController;
+    ModelMapper modelMapper;
 
     @BeforeEach
     void setup() {
         apartmentService = mock(ApartmentService.class);
         jsonMapper = new ObjectMapper();
-        apartmentController = new ApartmentController(apartmentService);
+        apartmentController = new ApartmentController(apartmentService, userService, modelMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(apartmentController).build();
+        modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
     /* ------------------ createApartment() tests ---------------------- */

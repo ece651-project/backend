@@ -38,8 +38,8 @@ public class ApartmentDto implements Serializable {
 
     private int price;
 
-//    @JsonIgnoreProperties("favoriteApartments")
-//    private List<UserEntity> users;
+    @JsonIgnoreProperties("favoriteApartments")
+    private List<UserEntity> users;
 
     public long getAid() {
         return aid;
@@ -113,4 +113,11 @@ public class ApartmentDto implements Serializable {
         this.price = price;
     }
 
+    public List<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
+    }
 }

@@ -2,18 +2,17 @@ package com.project.ece651.webapp.controllers;
 
 import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.UserEntity;
-import com.project.ece651.webapp.repositories.ApartmentRepository;
-import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.services.ApartmentService;
+import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgDto;
+import com.project.ece651.webapp.shared.UserDto;
 import com.project.ece651.webapp.utils.ApartmentUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 // reference https://www.callicoder.com/spring-boot-file-upload-download-jpa-hibernate-mysql-database-example/
@@ -23,10 +22,16 @@ import java.util.List;
 @RequestMapping("/apt")
 public class ApartmentController {
 
-    private ApartmentService apartmentServiceImpl;
+    private final ApartmentService apartmentServiceImpl;
 
-    public ApartmentController(ApartmentService apartmentServiceImpl) {
+    private final UserService userServiceImpl;
+
+    private final ModelMapper modelMapper;
+
+    public ApartmentController(ApartmentService apartmentServiceImpl, UserService userServiceImpl, ModelMapper modelMapper) {
         this.apartmentServiceImpl = apartmentServiceImpl;
+        this.userServiceImpl = userServiceImpl;
+        this.modelMapper = modelMapper;
     }
 
     /*
@@ -79,7 +84,15 @@ public class ApartmentController {
     public MsgDto deleteApartment(@PathVariable String uid, @PathVariable long aid) {
         // sample url localhost:8080/apt/delete_apt/12601d30-b1f6-448f-b3bc-a9acc4802ad8/1
         MsgDto response = new MsgDto();
+        ApartmentDto apartmentDto = apartmentServiceImpl.findApartmentByAid(aid);
         try {
+            // delete related fav-apt relationship
+            List<UserDto> userDtos = userServiceImpl.findAll();
+            for (UserDto userDto: userDtos) {
+                // Delete the favourite apartment to the user
+                userServiceImpl.delFav(userDto.getUid(), modelMapper.map(apartmentDto, ApartmentEntity.class));
+            }
+
             apartmentServiceImpl.deleteApartment(uid, aid);
         }
         catch (Exception e) {

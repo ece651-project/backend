@@ -4,6 +4,8 @@ import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.shared.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface UserService {
     UserDto addUser(UserDto userDetails);
     UserDto findByUid(String userName);
@@ -12,4 +14,6 @@ public interface UserService {
     void deleteUser(String uid);
     void addFav(String uid, ApartmentEntity apartment);
     void delFav(String uid, ApartmentEntity apartment);
+
+    List<UserDto> findAll();
 }
