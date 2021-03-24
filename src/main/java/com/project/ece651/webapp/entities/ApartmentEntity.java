@@ -60,7 +60,7 @@ public class ApartmentEntity implements Serializable {
     @Column(nullable=false)
     private int price;
 
-    @ManyToMany(mappedBy = "favoriteApartments", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToMany(mappedBy = "favoriteApartments", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<UserEntity> users;
 
     public long getAid() {
