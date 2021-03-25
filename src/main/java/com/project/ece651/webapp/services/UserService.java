@@ -1,8 +1,11 @@
 package com.project.ece651.webapp.services;
 
 import com.project.ece651.webapp.entities.ApartmentEntity;
+import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface UserService {
     UserDto addUser(UserDto userDetails);
