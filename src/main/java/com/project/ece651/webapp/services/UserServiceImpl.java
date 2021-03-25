@@ -3,7 +3,9 @@ package com.project.ece651.webapp.services;
 import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.UserRepository;
+import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.UserDto;
+import com.project.ece651.webapp.utils.ApartmentUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -113,5 +117,16 @@ public class UserServiceImpl implements UserService {
 
         // Save the updated data
         userRepository.save(originalUser);
+    }
+
+    public List<ApartmentDto> getFav(String uid) {
+        UserEntity userEntity = userRepository.findByUid(uid);
+        List<ApartmentEntity> favApts = userEntity.getFavoriteApartments();
+
+        List<ApartmentDto> apartmentDtos = favApts.stream()
+                .map(apartmentEntity -> ApartmentUtils.apartmentEntityToDto(apartmentEntity))
+                .collect(Collectors.toList());
+
+        return apartmentDtos;
     }
 }

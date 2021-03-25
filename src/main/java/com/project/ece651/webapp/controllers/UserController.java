@@ -9,6 +9,7 @@ import com.project.ece651.webapp.shared.MsgResponse;
 import com.project.ece651.webapp.services.UserService;
 import com.project.ece651.webapp.shared.UserDto;
 import com.project.ece651.webapp.shared.UserFavDto;
+import com.project.ece651.webapp.utils.ApartmentUtils;
 import org.apache.tomcat.util.json.JSONParser;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -212,7 +213,7 @@ public class UserController {
             // Find the apartments that belong to this user
             List<ApartmentDto> apartmentDtos = apartmentEntities.stream()
                     .filter(apartmentEntity -> apartmentEntity.getLandlord().getUid().equals(uid))
-                    .map(apartmentEntity -> modelMapper.map(apartmentEntity, ApartmentDto.class))
+                    .map(apartmentEntity -> ApartmentUtils.apartmentEntityToDto(apartmentEntity))
                     .collect(Collectors.toList());
 
             return jsonMapper.writeValueAsString(apartmentDtos);
@@ -295,7 +296,7 @@ public class UserController {
 //                .map(apartmentEntity -> modelMapper.map(apartmentEntity, ApartmentDto.class))
 //                .collect(Collectors.toList());
 
-        List<ApartmentDto> apartmentDtos = userFound.getFavoriteApartments();
+        List<ApartmentDto> apartmentDtos = userService.getFav(uid);
 
         return jsonMapper.writeValueAsString(apartmentDtos);
     }
