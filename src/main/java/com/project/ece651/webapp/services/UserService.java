@@ -15,5 +15,4 @@ public interface UserService {
     void deleteUser(String uid);
     void addFav(String uid, ApartmentEntity apartment);
     void delFav(String uid, ApartmentEntity apartment);
-    List<ApartmentDto> getFav(String uid);
 }

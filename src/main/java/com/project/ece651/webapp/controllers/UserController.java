@@ -296,7 +296,7 @@ public class UserController {
 //                .map(apartmentEntity -> modelMapper.map(apartmentEntity, ApartmentDto.class))
 //                .collect(Collectors.toList());
 
-        List<ApartmentDto> apartmentDtos = userService.getFav(uid);
+        List<ApartmentDto> apartmentDtos = userFound.getFavoriteApartments();
 
         return jsonMapper.writeValueAsString(apartmentDtos);
     }

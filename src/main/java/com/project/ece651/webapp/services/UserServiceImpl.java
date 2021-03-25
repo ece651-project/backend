@@ -56,7 +56,21 @@ public class UserServiceImpl implements UserService {
         }
 //        ModelMapper modelMapper = new ModelMapper();
 //        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        return modelMapper.map(userEntity, UserDto.class);
+        UserDto userDto = modelMapper.map(userEntity, UserDto.class);
+
+        // Set owned apartments
+        List<ApartmentDto> ownedApts = userEntity.getOwnedApartments().stream()
+                .map(apartmentEntity -> ApartmentUtils.apartmentEntityToDto(apartmentEntity))
+                .collect(Collectors.toList());
+        userDto.setOwnedApartments(ownedApts);
+
+        // Set fav apartments
+        List<ApartmentDto> favApts = userEntity.getFavoriteApartments().stream()
+                .map(apartmentEntity -> ApartmentUtils.apartmentEntityToDto(apartmentEntity))
+                .collect(Collectors.toList());
+        userDto.setFavoriteApartments(favApts);
+
+        return userDto;
     }
 
     public UserDto findByEmail(String email) {
@@ -117,16 +131,5 @@ public class UserServiceImpl implements UserService {
 
         // Save the updated data
         userRepository.save(originalUser);
-    }
-
-    public List<ApartmentDto> getFav(String uid) {
-        UserEntity userEntity = userRepository.findByUid(uid);
-        List<ApartmentEntity> favApts = userEntity.getFavoriteApartments();
-
-        List<ApartmentDto> apartmentDtos = favApts.stream()
-                .map(apartmentEntity -> ApartmentUtils.apartmentEntityToDto(apartmentEntity))
-                .collect(Collectors.toList());
-
-        return apartmentDtos;
     }
 }
