@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 // data transfer object that contains all information to be conveyed about a typical apartment entity
 // extend MsgDto to support an error message (will be useful when the query fails)
@@ -42,8 +43,9 @@ public class ApartmentDto implements Serializable {
 
     private String description;
 
-    // list of images stored in base64 string
-    private List<String> images;
+    // set of images stored in base64 string
+    private Set<String> images;
+    // private List<String> images;
 
     private Integer price;
 
@@ -122,11 +124,11 @@ public class ApartmentDto implements Serializable {
         this.description = description;
     }
 
-    public List<String> getImages() {
+    public Set<String> getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(Set<String> images) {
         this.images = images;
     }
 

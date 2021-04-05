@@ -6,6 +6,7 @@ import com.project.ece651.webapp.shared.ApartmentDto;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ApartmentUtils {
@@ -50,10 +51,9 @@ public class ApartmentUtils {
         // deal with images:
         // https://www.baeldung.com/java-base64-image-string
         if (apartmentEntity.getImages() != null && !apartmentEntity.getImages().isEmpty()) {
-            List<String> imageStrings = apartmentEntity.getImages()
-                    .stream()
+            Set<String> imageStrings = apartmentEntity.getImages().stream()
                     .map(imageBytes -> Base64.getEncoder().encodeToString(imageBytes.getData()))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
             apartmentDto.setImages(imageStrings);
         }
 

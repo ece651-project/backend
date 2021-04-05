@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface ApartmentService {
 
@@ -20,6 +21,7 @@ public interface ApartmentService {
     void deleteApartment(String uid, long aid) throws ActionNotAllowedException, ApartmentNotFoundException;
     List<ApartmentDto> listAllApartments();
     ApartmentDto findApartmentByAid(long aid);
+
     // void storeImages(Long aid, MultipartFile[] images) throws IOException;
-    void storeImages(ApartmentEntity apartmentEntity, List<String> images);
+    void storeImages(ApartmentEntity apartmentEntity, Set<String> images);
 }

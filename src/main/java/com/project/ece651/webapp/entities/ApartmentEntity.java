@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "apartment")
@@ -62,7 +64,8 @@ public class ApartmentEntity implements Serializable {
             private Byte[] data;
      */
     @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImageEntity> images = new ArrayList<>();
+    private Set<ImageEntity> images = new HashSet<>();
+    // private List<ImageEntity> images = new ArrayList<>();
 
     @Column(nullable=false)
     private int price;
@@ -154,11 +157,11 @@ public class ApartmentEntity implements Serializable {
         this.term = term;
     }
 
-    public List<ImageEntity> getImages() {
+    public Set<ImageEntity> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageEntity> images) {
+    public void setImages(Set<ImageEntity> images) {
         this.images = images;
     }
 
