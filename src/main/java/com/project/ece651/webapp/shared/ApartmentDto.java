@@ -24,6 +24,8 @@ public class ApartmentDto implements Serializable {
 
     private Type type;
 
+    private int vacancy;
+
     private String address;
 
     private Timestamp uploadTime;
@@ -31,8 +33,9 @@ public class ApartmentDto implements Serializable {
     @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
     private Date startMonth;
 
-    @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
-    private Date endMonth;
+//    @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
+//    private Date endMonth;
+    private int term;
 
     private String description;
 
@@ -65,6 +68,14 @@ public class ApartmentDto implements Serializable {
         this.type = type;
     }
 
+    public int getVacancy() {
+        return vacancy;
+    }
+
+    public void setVacancy(int vacancy) {
+        this.vacancy = vacancy;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -89,12 +100,12 @@ public class ApartmentDto implements Serializable {
         this.startMonth = startMonth;
     }
 
-    public Date getEndMonth() {
-        return endMonth;
+    public int getTerm() {
+        return term;
     }
 
-    public void setEndMonth(Date endMonth) {
-        this.endMonth = endMonth;
+    public void setTerm(int term) {
+        this.term = term;
     }
 
     public String getDescription() {

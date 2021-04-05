@@ -9,9 +9,10 @@ public class ApartmentUtils {
         // extract core information from apartment dto and put the info into the corresponding entity
         // information to extract include type, address, start month, end month, description, and price
         apartmentEntity.setType(apartmentDto.getType());
+        apartmentEntity.setVacancy(apartmentDto.getVacancy());
         apartmentEntity.setAddress(apartmentDto.getAddress());
         apartmentEntity.setStartMonth(apartmentDto.getStartMonth());
-        apartmentEntity.setEndMonth(apartmentDto.getEndMonth());
+        apartmentEntity.setTerm(apartmentDto.getTerm());
         apartmentEntity.setDescription(apartmentDto.getDescription());
         apartmentEntity.setPrice(apartmentDto.getPrice());
     }
@@ -31,10 +32,11 @@ public class ApartmentUtils {
         apartmentDto.setAid(apartmentEntity.getAid());
         apartmentDto.setLandlordId(apartmentEntity.getLandlord().getUid());
         apartmentDto.setType(apartmentEntity.getType());
+        apartmentDto.setVacancy(apartmentEntity.getVacancy());
         apartmentDto.setAddress(apartmentEntity.getAddress());
         apartmentDto.setUploadTime(apartmentEntity.getUploadTime());
         apartmentDto.setStartMonth(apartmentEntity.getStartMonth());
-        apartmentDto.setEndMonth(apartmentEntity.getEndMonth());
+        apartmentDto.setTerm(apartmentEntity.getTerm());
         apartmentDto.setDescription(apartmentEntity.getDescription());
         apartmentDto.setPrice(apartmentEntity.getPrice());
         return apartmentDto;

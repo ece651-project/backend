@@ -74,10 +74,11 @@ public class UserBootstrap implements ApplicationListener<ContextRefreshedEvent>
         ApartmentEntity apartment1 = new ApartmentEntity();
         apartment1.setLandlord(landlord1);
         apartment1.setType(null);
+        apartment1.setVacancy(1);
         apartment1.setAddress("Empty address 1");
         apartment1.setUploadTime(null);
         apartment1.setStartMonth(null);
-        apartment1.setEndMonth(null);
+        apartment1.setTerm(1);
         apartment1.setDescription("Empty description 1");
         apartment1.setPrice(11111);
         landlord1.addOwnedApartments(apartment1);
@@ -87,10 +88,11 @@ public class UserBootstrap implements ApplicationListener<ContextRefreshedEvent>
         ApartmentEntity apartment2 = new ApartmentEntity();
         apartment2.setLandlord(landlord2);
         apartment2.setType(null);
+        apartment2.setVacancy(2);
         apartment2.setAddress("Empty address 2");
         apartment2.setUploadTime(null);
         apartment2.setStartMonth(null);
-        apartment2.setEndMonth(null);
+        apartment2.setTerm(2);
         apartment2.setDescription("Empty description 2");
         apartment2.setPrice(22222);
         landlord2.addOwnedApartments(apartment2);

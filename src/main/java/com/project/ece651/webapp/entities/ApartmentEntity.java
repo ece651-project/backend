@@ -26,6 +26,10 @@ public class ApartmentEntity implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Type type;
 
+    // number of rooms
+    @Column
+    private int vacancy;
+
     @Column(nullable=false)
     private String address;
 
@@ -41,8 +45,11 @@ public class ApartmentEntity implements Serializable {
     @Column(nullable=true)
     private Date startMonth;
 
-    @Column(nullable=true)
-    private Date endMonth;
+//    @Column
+//    private Date endMonth;
+    // rental period length, measured in month
+    @Column
+    private int term;
 
     @Column(nullable=false)
     private String description;
@@ -91,6 +98,14 @@ public class ApartmentEntity implements Serializable {
         this.type = type;
     }
 
+    public int getVacancy() {
+        return vacancy;
+    }
+
+    public void setVacancy(int vacancy) {
+        this.vacancy = vacancy;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -131,12 +146,12 @@ public class ApartmentEntity implements Serializable {
         this.startMonth = startMonth;
     }
 
-    public Date getEndMonth() {
-        return endMonth;
+    public int getTerm() {
+        return term;
     }
 
-    public void setEndMonth(Date endMonth) {
-        this.endMonth = endMonth;
+    public void setTerm(int term) {
+        this.term = term;
     }
 
     public List<ImageEntity> getImages() {
