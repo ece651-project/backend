@@ -3,7 +3,9 @@ package com.project.ece651.webapp.services;
 import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.repositories.UserRepository;
+import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.UserDto;
+import com.project.ece651.webapp.utils.ApartmentUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -52,7 +56,21 @@ public class UserServiceImpl implements UserService {
         }
 //        ModelMapper modelMapper = new ModelMapper();
 //        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        return modelMapper.map(userEntity, UserDto.class);
+        UserDto userDto = modelMapper.map(userEntity, UserDto.class);
+
+        // Set owned apartments
+        List<ApartmentDto> ownedApts = userEntity.getOwnedApartments().stream()
+                .map(apartmentEntity -> ApartmentUtils.apartmentEntityToDto(apartmentEntity))
+                .collect(Collectors.toList());
+        userDto.setOwnedApartments(ownedApts);
+
+        // Set fav apartments
+        List<ApartmentDto> favApts = userEntity.getFavoriteApartments().stream()
+                .map(apartmentEntity -> ApartmentUtils.apartmentEntityToDto(apartmentEntity))
+                .collect(Collectors.toList());
+        userDto.setFavoriteApartments(favApts);
+
+        return userDto;
     }
 
     public UserDto findByEmail(String email) {
