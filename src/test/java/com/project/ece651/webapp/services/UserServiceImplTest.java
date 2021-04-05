@@ -102,7 +102,11 @@ class UserServiceImplTest {
     void updateUser() {
         when(userRepository.findByUid(anyString())).thenReturn(userEntity);
 
-        userService.updateUser(userDto);
+        try {
+            userService.updateUser(userDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         verify(userRepository, times(1)).findByUid(anyString());
         verify(userRepository, times(1)).save(any(UserEntity.class));

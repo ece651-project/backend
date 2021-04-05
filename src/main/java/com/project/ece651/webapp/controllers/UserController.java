@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /*TODO:
@@ -157,28 +158,57 @@ public class UserController {
     @ResponseBody
     public String updateUser(@RequestBody String userJson) throws JsonProcessingException {
         // Extract data from userJson
-        UserDto updatedUser = null;
+        Map<String, String> updatedData = null;
         try {
-            updatedUser = jsonMapper.readValue(userJson, UserDto.class);
+            updatedData = jsonMapper.readValue(userJson, Map.class);
         } catch (Exception e) {
             String errMsg = "Json processing error.";
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
 
-        if (updatedUser.getUid() == null) {
+        // Check whether uid is provided
+        if (!updatedData.containsKey("uid")) {
             String errMsg = "User ID not provided.";
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
 
         // Check whether the user exists
-        UserDto userFound = userService.findByUid(updatedUser.getUid());
+        UserDto userFound = userService.findByUid(updatedData.get("uid"));
         if (userFound == null) {
             String errMsg = "This user does not exist.";
             return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
         }
 
+        // Apply the updated data
+        if (updatedData.containsKey("email")) {
+            userFound.setEmail(updatedData.get("email"));
+        }
+        if (updatedData.containsKey("nickname")) {
+            userFound.setNickname(updatedData.get("nickname"));
+        }
+        if (updatedData.containsKey("phoneNum")) {
+            userFound.setPhoneNum(updatedData.get("phoneNum"));
+        }
+        if (updatedData.containsKey("password")) {
+            userFound.setPassword(updatedData.get("password"));
+        }
+
         // Update the user
-        userService.updateUser(updatedUser);
+        try {
+            userService.updateUser(userFound);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // Assumes that other constrains including length and email format have been checked by frontend
+            // only consider uniqueness here
+            String errMsg = e.getMessage();
+            if (errMsg.contains("unique_email")) {
+                errMsg = "You have already signed up an account with this email!";
+            } else if (errMsg.contains("unique_nickname")) {
+                errMsg = "This nickname has already been used! Please Change another one!";
+            }
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
 
         return jsonMapper.writeValueAsString(new MsgResponse(true, "User updated."));
     }
