@@ -15,12 +15,11 @@ import java.util.List;
 
 public interface ApartmentService {
 
-    public void addApartment(ApartmentDto apartmentDto) throws UserNotFoundException;
-    public void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException;
-    public void deleteApartment(String uid, long aid) throws ActionNotAllowedException, ApartmentNotFoundException;
-    public List<ApartmentDto> listAllApartments();
-    public ApartmentDto findApartmentByAid(long aid);
-    public void storeImages(Long aid, MultipartFile[] images) throws IOException;
-
-
+    void addApartment(ApartmentDto apartmentDto) throws UserNotFoundException;
+    void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException;
+    void deleteApartment(String uid, long aid) throws ActionNotAllowedException, ApartmentNotFoundException;
+    List<ApartmentDto> listAllApartments();
+    ApartmentDto findApartmentByAid(long aid);
+    // void storeImages(Long aid, MultipartFile[] images) throws IOException;
+    void storeImages(ApartmentEntity apartmentEntity, List<String> images);
 }

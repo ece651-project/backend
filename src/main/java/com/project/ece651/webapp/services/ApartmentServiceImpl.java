@@ -15,13 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
 
-    private UserRepository userRepository;
-    private ApartmentRepository apartmentRepository;
+    private final UserRepository userRepository;
+    private final ApartmentRepository apartmentRepository;
 
     public ApartmentServiceImpl(UserRepository userRepository, ApartmentRepository apartmentRepository) {
         this.userRepository = userRepository;
@@ -35,8 +36,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (userEntity != null) {
             // convert the apartmentEto to apartmentEntity
             ApartmentEntity apartmentEntity = ApartmentUtils.apartmentDtoToEntity(apartmentDto);
+
             // add the apartment into those owned by the user entity
             userEntity.addOwnedApartments(apartmentEntity);
+
+            // store images to the apartment
+            if (apartmentDto.getImages() != null) {
+                storeImages(apartmentEntity, apartmentDto.getImages());
+            }
+
             userRepository.save(userEntity);
         }
         else {
@@ -98,14 +106,22 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentDto;
     }
 
+//    @Override
+//    public void storeImages(Long aid, MultipartFile[] images) throws IOException {
+//        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+//        for (MultipartFile image : images) {
+//            ImageEntity imageEntity = new ImageEntity(image.getContentType(), image.getBytes());
+//            apartmentEntity.addImage(imageEntity);
+//        }
+//        apartmentRepository.save(apartmentEntity);
+//    }
+
     @Override
-    public void storeImages(Long aid, MultipartFile[] images) throws IOException {
-        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
-        for (MultipartFile image : images) {
-            ImageEntity imageEntity = new ImageEntity(image.getContentType(), image.getBytes());
+    public void storeImages(ApartmentEntity apartmentEntity, List<String> images) {
+        for (String image: images) {
+            ImageEntity imageEntity = new ImageEntity(Base64.getDecoder().decode(image));
             apartmentEntity.addImage(imageEntity);
         }
         apartmentRepository.save(apartmentEntity);
     }
-
 }

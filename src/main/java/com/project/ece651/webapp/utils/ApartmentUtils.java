@@ -1,10 +1,13 @@
 package com.project.ece651.webapp.utils;
 
 import com.project.ece651.webapp.entities.ApartmentEntity;
+import com.project.ece651.webapp.entities.ImageEntity;
 import com.project.ece651.webapp.shared.ApartmentDto;
 
+import java.util.List;
+
 public class ApartmentUtils {
-    // utils class contain methods to faciliate the conversion between ApartmentEntity and its corresponding Dto
+    // utils class contain methods to facilitate the conversion between ApartmentEntity and its corresponding Dto
     public static void apartmentDtoToEntity(ApartmentDto apartmentDto, ApartmentEntity apartmentEntity) {
         // extract core information from apartment dto and put the info into the corresponding entity
         // information to extract include type, address, start month, end month, description, and price
@@ -15,6 +18,8 @@ public class ApartmentUtils {
         apartmentEntity.setTerm(apartmentDto.getTerm());
         apartmentEntity.setDescription(apartmentDto.getDescription());
         apartmentEntity.setPrice(apartmentDto.getPrice());
+
+        // images are handled in ApartmentServiceImpl::storeImage
     }
 
     public static ApartmentEntity apartmentDtoToEntity(ApartmentDto apartmentDto) {

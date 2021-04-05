@@ -39,6 +39,9 @@ public class ApartmentDto implements Serializable {
 
     private String description;
 
+    // list of images stored in base64 string
+    private List<String> images;
+
     private int price;
 
 //    @JsonIgnoreProperties("favoriteApartments")
@@ -114,6 +117,14 @@ public class ApartmentDto implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public int getPrice() {

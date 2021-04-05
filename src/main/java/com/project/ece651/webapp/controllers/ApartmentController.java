@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/apt")
 public class ApartmentController {
 
-    private ApartmentService apartmentServiceImpl;
+    private final ApartmentService apartmentServiceImpl;
 
     public ApartmentController(ApartmentService apartmentServiceImpl) {
         this.apartmentServiceImpl = apartmentServiceImpl;
@@ -33,11 +33,12 @@ public class ApartmentController {
         Example request body:
         {
             "landlordId": "12601d30-b1f6-448f-b3bc-a9acc4802ad8",
-            "type": null,
+            "type": "APARTMENT",
+            "vacancy": 1,
             "address": "Empty address",
             "uploadTime": null,
-            "startMonth": null,
-            "endMonth": "2014-02-24",
+            "startMonth": "2021-02",
+            "term": 3,
             "description": "Empty description",
             "price": 10086
         }
@@ -103,22 +104,21 @@ public class ApartmentController {
         return apartmentServiceImpl.findApartmentByAid(aid);
     }
 
-    // experiment with images files
-    // should by no means be included in the released code
-    @PostMapping("/add_apt_imgs/{aid}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public MsgDto addApartmentImgs(@PathVariable long aid, @RequestParam("images") MultipartFile[] images) {
-        // sample url localhost:8080/apt/add_apt_imgs/3
-        MsgDto response = new MsgDto();
-        try {
-            apartmentServiceImpl.storeImages(aid, images);
-        }
-        catch (Exception e) {
-            response.setSuccess(false);
-            response.setResponseMsg("Image added to apartment error case");
-            return response;
-        }
-        return response;
-    }
-
+//    // experiment with images files
+//    // should by no means be included in the released code
+//    @PostMapping("/add_apt_imgs/{aid}")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public MsgDto addApartmentImgs(@PathVariable long aid, @RequestParam("images") MultipartFile[] images) {
+//        // sample url localhost:8080/apt/add_apt_imgs/3
+//        MsgDto response = new MsgDto();
+//        try {
+//            apartmentServiceImpl.storeImages(aid, images);
+//        }
+//        catch (Exception e) {
+//            response.setSuccess(false);
+//            response.setResponseMsg("Image added to apartment error case");
+//            return response;
+//        }
+//        return response;
+//    }
 }
