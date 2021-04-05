@@ -18,7 +18,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 // Path pattern ref: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/util/pattern/PathPattern.html
-                registry.addMapping("/**").allowedOrigins("*"); // * for all origins
+                registry.addMapping("/**")  // "/**" for all paths
+                        .allowedOrigins("*")     // "*" for all origins
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")     // default only include GET, POST and HEAD
+                        .allowedHeaders("*");
             }
         };
     }
