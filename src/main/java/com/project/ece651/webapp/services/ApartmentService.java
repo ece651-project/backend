@@ -12,15 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface ApartmentService {
 
-    public void addApartment(ApartmentDto apartmentDto) throws UserNotFoundException;
-    public void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException;
-    public void deleteApartment(String uid, long aid) throws ActionNotAllowedException, ApartmentNotFoundException;
-    public List<ApartmentDto> listAllApartments();
-    public ApartmentDto findApartmentByAid(long aid);
-    public void storeImages(Long aid, MultipartFile[] images) throws IOException;
+    void addApartment(ApartmentDto apartmentDto) throws UserNotFoundException;
+    void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException;
+    void deleteApartment(String uid, long aid) throws ActionNotAllowedException, ApartmentNotFoundException;
+    List<ApartmentDto> listAllApartments();
+    ApartmentDto findApartmentByAid(long aid);
 
-
+    // void storeImages(Long aid, MultipartFile[] images) throws IOException;
+    void storeImages(ApartmentEntity apartmentEntity, Set<String> images);
 }

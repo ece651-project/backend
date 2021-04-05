@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "apartment")
@@ -26,6 +28,10 @@ public class ApartmentEntity implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Type type;
 
+    // number of rooms
+    @Column
+    private int vacancy;
+
     @Column(nullable=false)
     private String address;
 
@@ -41,8 +47,11 @@ public class ApartmentEntity implements Serializable {
     @Column(nullable=true)
     private Date startMonth;
 
-    @Column(nullable=true)
-    private Date endMonth;
+//    @Column
+//    private Date endMonth;
+    // rental period length, measured in month
+    @Column
+    private int term;
 
     @Column(nullable=false)
     private String description;
@@ -55,7 +64,8 @@ public class ApartmentEntity implements Serializable {
             private Byte[] data;
      */
     @OneToMany(mappedBy = "apartment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImageEntity> images = new ArrayList<>();
+    private Set<ImageEntity> images = new HashSet<>();
+    // private List<ImageEntity> images = new ArrayList<>();
 
     @Column(nullable=false)
     private int price;
@@ -89,6 +99,14 @@ public class ApartmentEntity implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public int getVacancy() {
+        return vacancy;
+    }
+
+    public void setVacancy(int vacancy) {
+        this.vacancy = vacancy;
     }
 
     public String getAddress() {
@@ -131,19 +149,19 @@ public class ApartmentEntity implements Serializable {
         this.startMonth = startMonth;
     }
 
-    public Date getEndMonth() {
-        return endMonth;
+    public int getTerm() {
+        return term;
     }
 
-    public void setEndMonth(Date endMonth) {
-        this.endMonth = endMonth;
+    public void setTerm(int term) {
+        this.term = term;
     }
 
-    public List<ImageEntity> getImages() {
+    public Set<ImageEntity> getImages() {
         return images;
     }
 
-    public void setImages(List<ImageEntity> images) {
+    public void setImages(Set<ImageEntity> images) {
         this.images = images;
     }
 

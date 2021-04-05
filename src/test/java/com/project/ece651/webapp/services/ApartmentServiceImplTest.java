@@ -45,9 +45,10 @@ public class ApartmentServiceImplTest {
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
         apartmentDto.setType(Type.HOUSE);
+        apartmentDto.setVacancy(1);
         apartmentDto.setAddress("Empty address");
         apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
-        apartmentDto.setEndMonth(null);
+        apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
         apartmentDto.setLandlordId(landlordId);
@@ -64,9 +65,10 @@ public class ApartmentServiceImplTest {
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
         apartmentDto.setType(Type.HOUSE);
+        apartmentDto.setVacancy(1);
         apartmentDto.setAddress("Empty address");
         apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
-        apartmentDto.setEndMonth(null);
+        apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
         apartmentDto.setLandlordId(landlordId);
@@ -90,12 +92,13 @@ public class ApartmentServiceImplTest {
         when(apartmentRepository.findByAid(aid)).thenReturn(originalEntity);
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
-        apartmentDto.setLandlordId(expectedLandlordId);
-        apartmentDto.setAid(aid);
+        // apartmentDto.setLandlordId(expectedLandlordId);
+        // apartmentDto.setAid(aid);
         apartmentDto.setType(Type.APARTMENT);
+        apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
         apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
-        apartmentDto.setEndMonth(null);
+        apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
         // when
@@ -114,9 +117,10 @@ public class ApartmentServiceImplTest {
         apartmentDto.setLandlordId(expectedLandlordId);
         apartmentDto.setAid(aid);
         apartmentDto.setType(Type.APARTMENT);
+        apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
         apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
-        apartmentDto.setEndMonth(null);
+        apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
         // an ApartmentNotFound Exception is expected
@@ -141,9 +145,10 @@ public class ApartmentServiceImplTest {
         apartmentDto.setLandlordId(expectedLandlordId + "PLACE HOLDER");
         apartmentDto.setAid(aid);
         apartmentDto.setType(Type.APARTMENT);
+        apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
         apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
-        apartmentDto.setEndMonth(null);
+        apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
         // an ApartmentNotFound Exception is expected

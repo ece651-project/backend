@@ -14,14 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
 
-    private UserRepository userRepository;
-    private ApartmentRepository apartmentRepository;
+    private final UserRepository userRepository;
+    private final ApartmentRepository apartmentRepository;
 
     public ApartmentServiceImpl(UserRepository userRepository, ApartmentRepository apartmentRepository) {
         this.userRepository = userRepository;
@@ -35,8 +34,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (userEntity != null) {
             // convert the apartmentEto to apartmentEntity
             ApartmentEntity apartmentEntity = ApartmentUtils.apartmentDtoToEntity(apartmentDto);
+
             // add the apartment into those owned by the user entity
             userEntity.addOwnedApartments(apartmentEntity);
+
+            // store images to the apartment
+            if (apartmentDto.getImages() != null && !apartmentDto.getImages().isEmpty()) {
+                storeImages(apartmentEntity, apartmentDto.getImages());
+            }
+
             userRepository.save(userEntity);
         }
         else {
@@ -46,15 +52,50 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException {
+    public void updateApartment(long aid, ApartmentDto updatedApartmentDto) throws ApartmentNotFoundException {
         ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
         if (apartmentEntity != null) {
             // apartment in database case
-            // check whether the user has right to do the updating
-            if (!apartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid()))
-                throw new ActionNotAllowedException("User other than landlord has no right to perform the update");
+
             // update the apartment and persist to database
-            ApartmentUtils.apartmentDtoToEntity(apartmentDto, apartmentEntity);
+            if (updatedApartmentDto.getAid() != null) {
+                throw new ActionNotAllowedException("Could not update apartment ID!");
+            }
+            if (updatedApartmentDto.getLandlordId() != null &&
+                    !updatedApartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid())) {
+                throw new ActionNotAllowedException("Apartment not belong to current user!");
+            }
+            if (updatedApartmentDto.getUploadTime() != null) {
+                throw new ActionNotAllowedException("Could not update upload time!");
+            }
+
+            if (updatedApartmentDto.getType() != null) {
+                apartmentEntity.setType(updatedApartmentDto.getType());
+            }
+            if (updatedApartmentDto.getVacancy() != null) {
+                apartmentEntity.setVacancy(updatedApartmentDto.getVacancy());
+            }
+            if (updatedApartmentDto.getAddress() != null) {
+                apartmentEntity.setAddress(updatedApartmentDto.getAddress());
+            }
+            if (updatedApartmentDto.getStartMonth() != null) {
+                apartmentEntity.setStartMonth(updatedApartmentDto.getStartMonth());
+            }
+            if (updatedApartmentDto.getTerm() != null) {
+                apartmentEntity.setTerm(updatedApartmentDto.getTerm());
+            }
+            if (updatedApartmentDto.getDescription() != null) {
+                apartmentEntity.setDescription(updatedApartmentDto.getDescription());
+            }
+            if (updatedApartmentDto.getPrice() != null) {
+                apartmentEntity.setPrice(updatedApartmentDto.getPrice());
+            }
+
+            // update images
+            if (updatedApartmentDto.getImages() != null) {
+                storeImages(apartmentEntity, updatedApartmentDto.getImages());
+            }
+
             apartmentRepository.save(apartmentEntity);
         }
         else {
@@ -62,6 +103,24 @@ public class ApartmentServiceImpl implements ApartmentService {
             throw new ApartmentNotFoundException("Apartment to be updated not in database");
         }
     }
+
+//    @Override
+//    public void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException {
+//        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+//        if (apartmentEntity != null) {
+//            // apartment in database case
+//            // check whether the user has right to do the updating
+//            if (!apartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid()))
+//                throw new ActionNotAllowedException("User other than landlord has no right to perform the update");
+//            // update the apartment and persist to database
+//            ApartmentUtils.apartmentDtoToEntity(apartmentDto, apartmentEntity);
+//            apartmentRepository.save(apartmentEntity);
+//        }
+//        else {
+//            // apartment not found case
+//            throw new ApartmentNotFoundException("Apartment to be updated not in database");
+//        }
+//    }
 
     @Override
     public void deleteApartment(String uid, long aid) throws ActionNotAllowedException, ApartmentNotFoundException {
@@ -98,14 +157,23 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentDto;
     }
 
+//    @Override
+//    public void storeImages(Long aid, MultipartFile[] images) throws IOException {
+//        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+//        for (MultipartFile image : images) {
+//            ImageEntity imageEntity = new ImageEntity(image.getContentType(), image.getBytes());
+//            apartmentEntity.addImage(imageEntity);
+//        }
+//        apartmentRepository.save(apartmentEntity);
+//    }
+
     @Override
-    public void storeImages(Long aid, MultipartFile[] images) throws IOException {
-        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
-        for (MultipartFile image : images) {
-            ImageEntity imageEntity = new ImageEntity(image.getContentType(), image.getBytes());
+    public void storeImages(ApartmentEntity apartmentEntity, Set<String> images) {
+        for (String image: images) {
+            // https://www.baeldung.com/java-base64-image-string
+            ImageEntity imageEntity = new ImageEntity(Base64.getDecoder().decode(image));
             apartmentEntity.addImage(imageEntity);
         }
         apartmentRepository.save(apartmentEntity);
     }
-
 }
