@@ -69,8 +69,7 @@ public class ApartmentController {
         try {
             updatedApartmentDto = jsonMapper.readValue(apartmentJson, ApartmentDto.class);
         } catch (Exception e) {
-            String errMsg = "Json processing error.";
-            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+            return jsonMapper.writeValueAsString(new MsgResponse(false, e.getMessage()));
         }
 
         try {

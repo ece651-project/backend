@@ -64,8 +64,9 @@ public class ApartmentServiceImpl implements ApartmentService {
             if (updatedApartmentDto.getAid() != null) {
                 throw new ActionNotAllowedException("Could not update apartment ID!");
             }
-            if (updatedApartmentDto.getLandlordId() != null) {
-                throw new ActionNotAllowedException("Could not update landlord ID!");
+            if (updatedApartmentDto.getLandlordId() != null &&
+                    !updatedApartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid())) {
+                throw new ActionNotAllowedException("Apartment not belong to current user!");
             }
             if (updatedApartmentDto.getUploadTime() != null) {
                 throw new ActionNotAllowedException("Could not update upload time!");

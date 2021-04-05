@@ -2,6 +2,7 @@ package com.project.ece651.webapp.shared;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.project.ece651.webapp.entities.Type;
 import com.project.ece651.webapp.entities.UserEntity;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 // data transfer object that contains all information to be conveyed about a typical apartment entity
 // extend MsgDto to support an error message (will be useful when the query fails)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class ApartmentDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
 

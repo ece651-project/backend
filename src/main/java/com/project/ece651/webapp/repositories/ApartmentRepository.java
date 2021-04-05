@@ -10,6 +10,6 @@ import java.util.List;
 public interface ApartmentRepository extends CrudRepository<ApartmentEntity, Long> {
     // current set to list because of easiest to play around
     // will change to iterable
-    public List<ApartmentEntity> findAll();
-    public ApartmentEntity findByAid(long aid);
+    List<ApartmentEntity> findAll();
+    ApartmentEntity findByAid(long aid);
 }
