@@ -48,6 +48,7 @@ public class ApartmentUtils {
         apartmentDto.setPrice(apartmentEntity.getPrice());
 
         // deal with images:
+        // https://www.baeldung.com/java-base64-image-string
         if (apartmentEntity.getImages() != null && !apartmentEntity.getImages().isEmpty()) {
             List<String> imageStrings = apartmentEntity.getImages()
                     .stream()

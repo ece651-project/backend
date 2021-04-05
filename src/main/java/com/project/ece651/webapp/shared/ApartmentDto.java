@@ -16,7 +16,7 @@ import java.util.List;
 public class ApartmentDto implements Serializable {
     private static final long serialVersionUID = 9031456972238819242L;
 
-    private long aid;
+    private Long aid;
 
     // to avoid infinite recursion:
     // https://stackoverflow.com/questions/3325387/infinite-recursion-with-jackson-json-and-hibernate-jpa-issue
@@ -25,7 +25,7 @@ public class ApartmentDto implements Serializable {
 
     private Type type;
 
-    private int vacancy;
+    private Integer vacancy;
 
     private String address;
 
@@ -36,23 +36,23 @@ public class ApartmentDto implements Serializable {
 
 //    @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
 //    private Date endMonth;
-    private int term;
+    private Integer term;
 
     private String description;
 
     // list of images stored in base64 string
     private List<String> images;
 
-    private int price;
+    private Integer price;
 
 //    @JsonIgnoreProperties("favoriteApartments")
 //    private List<UserEntity> users;
 
-    public long getAid() {
+    public Long getAid() {
         return aid;
     }
 
-    public void setAid(long aid) {
+    public void setAid(Long aid) {
         this.aid = aid;
     }
 
@@ -72,11 +72,11 @@ public class ApartmentDto implements Serializable {
         this.type = type;
     }
 
-    public int getVacancy() {
+    public Integer getVacancy() {
         return vacancy;
     }
 
-    public void setVacancy(int vacancy) {
+    public void setVacancy(Integer vacancy) {
         this.vacancy = vacancy;
     }
 
@@ -104,11 +104,11 @@ public class ApartmentDto implements Serializable {
         this.startMonth = startMonth;
     }
 
-    public int getTerm() {
+    public Integer getTerm() {
         return term;
     }
 
-    public void setTerm(int term) {
+    public void setTerm(Integer term) {
         this.term = term;
     }
 
@@ -128,12 +128,11 @@ public class ApartmentDto implements Serializable {
         this.images = images;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
-
 }

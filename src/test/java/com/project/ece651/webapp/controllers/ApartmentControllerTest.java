@@ -1,15 +1,11 @@
 package com.project.ece651.webapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.ece651.webapp.entities.UserEntity;
 import com.project.ece651.webapp.exceptions.ActionNotAllowedException;
 import com.project.ece651.webapp.exceptions.ApartmentNotFoundException;
 import com.project.ece651.webapp.exceptions.UserNotFoundException;
 import com.project.ece651.webapp.services.ApartmentService;
-import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgDto;
-import com.project.ece651.webapp.shared.MsgResponse;
-import com.project.ece651.webapp.shared.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -37,7 +33,7 @@ public class ApartmentControllerTest {
     void setup() {
         apartmentService = mock(ApartmentService.class);
         jsonMapper = new ObjectMapper();
-        apartmentController = new ApartmentController(apartmentService);
+        apartmentController = new ApartmentController(apartmentService, jsonMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(apartmentController).build();
     }
 

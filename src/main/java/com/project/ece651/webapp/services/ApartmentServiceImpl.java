@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
@@ -54,15 +55,49 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException {
+    public void updateApartment(long aid, ApartmentDto updatedApartmentDto) throws ApartmentNotFoundException {
         ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
         if (apartmentEntity != null) {
             // apartment in database case
-            // check whether the user has right to do the updating
-            if (!apartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid()))
-                throw new ActionNotAllowedException("User other than landlord has no right to perform the update");
+
             // update the apartment and persist to database
-            ApartmentUtils.apartmentDtoToEntity(apartmentDto, apartmentEntity);
+            if (updatedApartmentDto.getAid() != null) {
+                throw new ActionNotAllowedException("Could not update apartment ID!");
+            }
+            if (updatedApartmentDto.getLandlordId() != null) {
+                throw new ActionNotAllowedException("Could not update landlord ID!");
+            }
+            if (updatedApartmentDto.getUploadTime() != null) {
+                throw new ActionNotAllowedException("Could not update upload time!");
+            }
+
+            if (updatedApartmentDto.getType() != null) {
+                apartmentEntity.setType(updatedApartmentDto.getType());
+            }
+            if (updatedApartmentDto.getVacancy() != null) {
+                apartmentEntity.setVacancy(updatedApartmentDto.getVacancy());
+            }
+            if (updatedApartmentDto.getAddress() != null) {
+                apartmentEntity.setAddress(updatedApartmentDto.getAddress());
+            }
+            if (updatedApartmentDto.getStartMonth() != null) {
+                apartmentEntity.setStartMonth(updatedApartmentDto.getStartMonth());
+            }
+            if (updatedApartmentDto.getTerm() != null) {
+                apartmentEntity.setTerm(updatedApartmentDto.getTerm());
+            }
+            if (updatedApartmentDto.getDescription() != null) {
+                apartmentEntity.setDescription(updatedApartmentDto.getDescription());
+            }
+            if (updatedApartmentDto.getPrice() != null) {
+                apartmentEntity.setPrice(updatedApartmentDto.getPrice());
+            }
+
+            // update images
+            if (updatedApartmentDto.getImages() != null) {
+                storeImages(apartmentEntity, updatedApartmentDto.getImages());
+            }
+
             apartmentRepository.save(apartmentEntity);
         }
         else {
@@ -70,6 +105,24 @@ public class ApartmentServiceImpl implements ApartmentService {
             throw new ApartmentNotFoundException("Apartment to be updated not in database");
         }
     }
+
+//    @Override
+//    public void updateApartment(long aid, ApartmentDto apartmentDto) throws ApartmentNotFoundException {
+//        ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+//        if (apartmentEntity != null) {
+//            // apartment in database case
+//            // check whether the user has right to do the updating
+//            if (!apartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid()))
+//                throw new ActionNotAllowedException("User other than landlord has no right to perform the update");
+//            // update the apartment and persist to database
+//            ApartmentUtils.apartmentDtoToEntity(apartmentDto, apartmentEntity);
+//            apartmentRepository.save(apartmentEntity);
+//        }
+//        else {
+//            // apartment not found case
+//            throw new ApartmentNotFoundException("Apartment to be updated not in database");
+//        }
+//    }
 
     @Override
     public void deleteApartment(String uid, long aid) throws ActionNotAllowedException, ApartmentNotFoundException {
@@ -119,6 +172,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void storeImages(ApartmentEntity apartmentEntity, List<String> images) {
         for (String image: images) {
+            // https://www.baeldung.com/java-base64-image-string
             ImageEntity imageEntity = new ImageEntity(Base64.getDecoder().decode(image));
             apartmentEntity.addImage(imageEntity);
         }

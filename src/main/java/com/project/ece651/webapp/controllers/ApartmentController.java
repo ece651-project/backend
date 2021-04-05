@@ -1,20 +1,16 @@
 package com.project.ece651.webapp.controllers;
 
-import com.project.ece651.webapp.entities.ApartmentEntity;
-import com.project.ece651.webapp.entities.UserEntity;
-import com.project.ece651.webapp.repositories.ApartmentRepository;
-import com.project.ece651.webapp.repositories.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ece651.webapp.services.ApartmentService;
 import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgDto;
-import com.project.ece651.webapp.utils.ApartmentUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.project.ece651.webapp.shared.MsgResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // reference https://www.callicoder.com/spring-boot-file-upload-download-jpa-hibernate-mysql-database-example/
 // for image uploading, downloading and storing in database
@@ -24,9 +20,11 @@ import java.util.List;
 public class ApartmentController {
 
     private final ApartmentService apartmentServiceImpl;
+    private final ObjectMapper jsonMapper;
 
-    public ApartmentController(ApartmentService apartmentServiceImpl) {
+    public ApartmentController(ApartmentService apartmentServiceImpl, ObjectMapper jsonMapper) {
         this.apartmentServiceImpl = apartmentServiceImpl;
+        this.jsonMapper = jsonMapper;
     }
 
     /*
@@ -61,19 +59,45 @@ public class ApartmentController {
 
     @PutMapping("/update_apt/{aid}")
     @ResponseStatus(HttpStatus.OK)
-    public MsgDto updateApartment(@PathVariable long aid, @RequestBody ApartmentDto apartmentDto) {
+    public String updateApartment(@PathVariable long aid, @RequestBody String apartmentJson)
+            throws JsonProcessingException {
         // sample url localhost:8080/apt/update_apt/1
-        // add one new apartment according to the given apartment information
+        // update apartment according to the given apartment information
         MsgDto response = new MsgDto();
+
+        ApartmentDto updatedApartmentDto;
         try {
-            apartmentServiceImpl.updateApartment(aid, apartmentDto);
+            updatedApartmentDto = jsonMapper.readValue(apartmentJson, ApartmentDto.class);
+        } catch (Exception e) {
+            String errMsg = "Json processing error.";
+            return jsonMapper.writeValueAsString(new MsgResponse(false, errMsg));
+        }
+
+        try {
+            apartmentServiceImpl.updateApartment(aid, updatedApartmentDto);
         }
         catch (Exception e) {
             response.setSuccess(false);
             response.setResponseMsg(e.getMessage());
         }
-        return response;
+        return jsonMapper.writeValueAsString(response);
     }
+
+//    @PutMapping("/update_apt/{aid}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public MsgDto updateApartment(@PathVariable long aid, @RequestBody ApartmentDto apartmentDto) {
+//        // sample url localhost:8080/apt/update_apt/1
+//        // add one new apartment according to the given apartment information
+//        MsgDto response = new MsgDto();
+//        try {
+//            apartmentServiceImpl.updateApartment(aid, apartmentDto);
+//        }
+//        catch (Exception e) {
+//            response.setSuccess(false);
+//            response.setResponseMsg(e.getMessage());
+//        }
+//        return response;
+//    }
 
     @DeleteMapping("/delete_apt/{uid}/{aid}")
     @ResponseStatus(HttpStatus.OK)

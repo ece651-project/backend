@@ -92,8 +92,8 @@ public class ApartmentServiceImplTest {
         when(apartmentRepository.findByAid(aid)).thenReturn(originalEntity);
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
-        apartmentDto.setLandlordId(expectedLandlordId);
-        apartmentDto.setAid(aid);
+        // apartmentDto.setLandlordId(expectedLandlordId);
+        // apartmentDto.setAid(aid);
         apartmentDto.setType(Type.APARTMENT);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
