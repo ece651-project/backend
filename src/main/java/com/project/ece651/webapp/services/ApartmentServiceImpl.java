@@ -41,7 +41,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             userEntity.addOwnedApartments(apartmentEntity);
 
             // store images to the apartment
-            if (apartmentDto.getImages() != null) {
+            if (apartmentDto.getImages() != null && !apartmentDto.getImages().isEmpty()) {
                 storeImages(apartmentEntity, apartmentDto.getImages());
             }
 

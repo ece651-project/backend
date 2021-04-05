@@ -8,6 +8,7 @@ import com.project.ece651.webapp.entities.UserEntity;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 // data transfer object that contains all information to be conveyed about a typical apartment entity

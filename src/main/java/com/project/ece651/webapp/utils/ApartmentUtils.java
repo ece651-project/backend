@@ -4,7 +4,9 @@ import com.project.ece651.webapp.entities.ApartmentEntity;
 import com.project.ece651.webapp.entities.ImageEntity;
 import com.project.ece651.webapp.shared.ApartmentDto;
 
+import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApartmentUtils {
     // utils class contain methods to facilitate the conversion between ApartmentEntity and its corresponding Dto
@@ -44,6 +46,16 @@ public class ApartmentUtils {
         apartmentDto.setTerm(apartmentEntity.getTerm());
         apartmentDto.setDescription(apartmentEntity.getDescription());
         apartmentDto.setPrice(apartmentEntity.getPrice());
+
+        // deal with images:
+        if (apartmentEntity.getImages() != null && !apartmentEntity.getImages().isEmpty()) {
+            List<String> imageStrings = apartmentEntity.getImages()
+                    .stream()
+                    .map(imageBytes -> Base64.getEncoder().encodeToString(imageBytes.getData()))
+                    .collect(Collectors.toList());
+            apartmentDto.setImages(imageStrings);
+        }
+
         return apartmentDto;
     }
 }
