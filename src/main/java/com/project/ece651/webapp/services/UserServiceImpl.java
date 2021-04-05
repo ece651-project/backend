@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // TODO: add methods
-    public void updateUser(UserDto updatedUser) {
+    public void updateUser(UserDto updatedUser) throws Exception {
         // Obtain the original user in the database
         UserEntity originalUser = userRepository.findByUid(updatedUser.getUid());
 
@@ -98,8 +98,9 @@ public class UserServiceImpl implements UserService {
         originalUser.setEmail(updatedUser.getEmail());
         originalUser.setNickname(updatedUser.getNickname());
         originalUser.setPhoneNum(updatedUser.getPhoneNum());
-        originalUser.setEncryptedPassword(bCryptPasswordEncoder.encode(updatedUser.getPassword()));
-
+        if (updatedUser.getPassword() != null) {
+            originalUser.setEncryptedPassword(bCryptPasswordEncoder.encode(updatedUser.getPassword()));
+        }
         // Save the updated data
         userRepository.save(originalUser);
     }
