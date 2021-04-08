@@ -174,7 +174,11 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void storeImages(ApartmentEntity apartmentEntity, Set<String> images) {
         for (String image: images) {
             // https://www.baeldung.com/java-base64-image-string
-            ImageEntity imageEntity = new ImageEntity(Base64.getDecoder().decode(image));
+            // ImageEntity imageEntity = new ImageEntity(Base64.getDecoder().decode(image));
+
+            Base64.Decoder decoder = Base64.getMimeDecoder();
+            String[] splitImage = image.split(",");
+            ImageEntity imageEntity = new ImageEntity(splitImage[0], decoder.decode(splitImage[1]));
             apartmentEntity.addImage(imageEntity);
         }
         apartmentRepository.save(apartmentEntity);

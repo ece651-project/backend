@@ -17,8 +17,8 @@ public class ImageEntity {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private ApartmentEntity apartment;
 
-//    @Column(nullable=false)
-//    private String imageType;
+    @Column(nullable=false)
+    private String imageType;
 
     @Lob
     private byte[] data;
@@ -28,16 +28,16 @@ public class ImageEntity {
     public ImageEntity (byte[] data) {
         this.data = data;
     }
-
-    public ImageEntity (ApartmentEntity apartmentEntity, byte[] data) {
-        this.apartment = apartmentEntity;
-        this.data = data;
-    }
-
-//    public ImageEntity (String imageType, byte[] data) {
-//        this.imageType = imageType;
+//
+//    public ImageEntity (ApartmentEntity apartmentEntity, byte[] data) {
+//        this.apartment = apartmentEntity;
 //        this.data = data;
 //    }
+
+    public ImageEntity (String imageType, byte[] data) {
+        this.imageType = imageType;
+        this.data = data;
+    }
 
     public ApartmentEntity getApartment() {
         return apartment;
@@ -55,13 +55,13 @@ public class ImageEntity {
         this.imageId = imageId;
     }
 
-//    public String getImageType() {
-//        return imageType;
-//    }
-//
-//    public void setImageType(String imageType) {
-//        this.imageType = imageType;
-//    }
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
 
     public byte[] getData() {
         return data;
