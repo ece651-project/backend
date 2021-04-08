@@ -6,6 +6,7 @@ import com.project.ece651.webapp.exceptions.ApartmentNotFoundException;
 import com.project.ece651.webapp.exceptions.UserNotFoundException;
 import com.project.ece651.webapp.services.ApartmentService;
 import com.project.ece651.webapp.shared.MsgDto;
+import com.project.ece651.webapp.shared.MsgResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -50,8 +51,8 @@ public class ApartmentControllerTest {
         )
                 .andExpect(status().is2xxSuccessful())
                 .andReturn().getResponse().getContentAsString();
-        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
-        assertTrue(msgDto.isSuccess());
+        MsgResponse msgResponse = jsonMapper.readValue(response, MsgResponse.class);
+        assertTrue(msgResponse.isSuccess());
     }
 
     @Test
@@ -66,8 +67,8 @@ public class ApartmentControllerTest {
         )
                 .andExpect(status().is2xxSuccessful())
                 .andReturn().getResponse().getContentAsString();
-        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
-        assertFalse(msgDto.isSuccess());
+        MsgResponse msgResponse = jsonMapper.readValue(response, MsgResponse.class);
+        assertFalse(msgResponse.isSuccess());
     }
 
     /* ------------------ updateApartment() tests ---------------------- */
@@ -77,15 +78,15 @@ public class ApartmentControllerTest {
         // mock behavior
         doNothing().when(apartmentService).updateApartment(eq(expectedAid), any());
         // in JSON format
-        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
-        String response = mockMvc.perform(put("/apt/update_apt/" + expectedAid)
+        String apartmentRequestBody = "{\"aid\": \"1\", \"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
+        String response = mockMvc.perform(put("/apt/update_apt/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(apartmentRequestBody)
         )
                 .andExpect(status().is2xxSuccessful())
                 .andReturn().getResponse().getContentAsString();
-        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
-        assertTrue(msgDto.isSuccess());
+        MsgResponse msgResponse = jsonMapper.readValue(response, MsgResponse.class);
+        assertTrue(msgResponse.isSuccess());
     }
 
     @Test
@@ -95,16 +96,16 @@ public class ApartmentControllerTest {
         String msg = "Apartment to be updated not in database";
         doThrow(new ApartmentNotFoundException(msg)).when(apartmentService).updateApartment(eq(expectedAid), any());
         // in JSON format
-        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
-        String response = mockMvc.perform(put("/apt/update_apt/" + expectedAid)
+        String apartmentRequestBody = "{\"aid\": \"1\", \"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
+        String response = mockMvc.perform(put("/apt/update_apt/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(apartmentRequestBody)
         )
                 .andExpect(status().is2xxSuccessful())
                 .andReturn().getResponse().getContentAsString();
-        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
-        assertFalse(msgDto.isSuccess());
-        assertEquals(msg, msgDto.getResponseMsg());
+        MsgResponse msgResponse = jsonMapper.readValue(response, MsgResponse.class);
+        assertFalse(msgResponse.isSuccess());
+        assertEquals(msg, msgResponse.getMsg());
     }
 
     @Test
@@ -114,16 +115,16 @@ public class ApartmentControllerTest {
         String msg = "Apartment to be updated not in database";
         doThrow(new ActionNotAllowedException(msg)).when(apartmentService).updateApartment(eq(expectedAid), any());
         // in JSON format
-        String apartmentRequestBody = "{\"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
-        String response = mockMvc.perform(put("/apt/update_apt/" + expectedAid)
+        String apartmentRequestBody = "{\"aid\": \"1\", \"landlordId\": \"12601d30-b1f6-448f-b3bc-a9acc4802ad8\"}";
+        String response = mockMvc.perform(put("/apt/update_apt/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(apartmentRequestBody)
         )
                 .andExpect(status().is2xxSuccessful())
                 .andReturn().getResponse().getContentAsString();
-        MsgDto msgDto = jsonMapper.readValue(response, MsgDto.class);
-        assertFalse(msgDto.isSuccess());
-        assertEquals(msg, msgDto.getResponseMsg());
+        MsgResponse msgResponse = jsonMapper.readValue(response, MsgResponse.class);
+        assertFalse(msgResponse.isSuccess());
+        assertEquals(msg, msgResponse.getMsg());
     }
 
     /* ------------------ deleteApartment() tests ---------------------- */
