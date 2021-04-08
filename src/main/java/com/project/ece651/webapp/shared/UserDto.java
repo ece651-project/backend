@@ -1,6 +1,7 @@
 package com.project.ece651.webapp.shared;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.project.ece651.webapp.entities.ApartmentEntity;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // DTO: data transfer object
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class UserDto extends MsgResponse implements Serializable {
     private static final long serialVersionUID = 3031456972238819242L;
 

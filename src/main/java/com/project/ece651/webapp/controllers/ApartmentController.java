@@ -2,6 +2,7 @@ package com.project.ece651.webapp.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.ece651.webapp.exceptions.ApartmentNotFoundException;
 import com.project.ece651.webapp.services.ApartmentService;
 import com.project.ece651.webapp.shared.ApartmentDto;
 import com.project.ece651.webapp.shared.MsgDto;
@@ -126,7 +127,7 @@ public class ApartmentController {
 
     @GetMapping("/get_apt/{aid}")
     @ResponseStatus(HttpStatus.OK)
-    public ApartmentDto getApartment(@PathVariable long aid) {
+    public ApartmentDto getApartment(@PathVariable long aid) throws JsonProcessingException {
         // sample url localhost:8080/apt/get_apt/1
         return apartmentServiceImpl.findApartmentByAid(aid);
     }

@@ -153,6 +153,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentDto findApartmentByAid(long aid) {
         ApartmentEntity apartmentEntity = apartmentRepository.findByAid(aid);
+        /*if (apartmentEntity == null) {
+            throw new ApartmentNotFoundException("Aid not found!");
+        }*/
         ApartmentDto apartmentDto = ApartmentUtils.apartmentEntityToDto(apartmentEntity);
         return apartmentDto;
     }
