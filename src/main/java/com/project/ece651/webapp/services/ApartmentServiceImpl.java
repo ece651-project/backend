@@ -58,9 +58,6 @@ public class ApartmentServiceImpl implements ApartmentService {
             // apartment in database case
 
             // update the apartment and persist to database
-            if (updatedApartmentDto.getAid() != null) {
-                throw new ActionNotAllowedException("Could not update apartment ID!");
-            }
             if (updatedApartmentDto.getLandlordId() != null &&
                     !updatedApartmentDto.getLandlordId().equals(apartmentEntity.getLandlord().getUid())) {
                 throw new ActionNotAllowedException("Apartment not belong to current user!");

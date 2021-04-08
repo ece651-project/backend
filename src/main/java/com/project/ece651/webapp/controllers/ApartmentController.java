@@ -64,9 +64,9 @@ public class ApartmentController {
         return jsonMapper.writeValueAsString(new MsgResponse(true, null));
     }
 
-    @PutMapping("/update_apt/{aid}")
+    @PutMapping("/update_apt")
     @ResponseStatus(HttpStatus.OK)
-    public String updateApartment(@PathVariable long aid, @RequestBody String apartmentJson)
+    public String updateApartment(@RequestBody String apartmentJson)
             throws JsonProcessingException {
         // sample url localhost:8080/apt/update_apt/1
         // update apartment according to the given apartment information
@@ -78,8 +78,13 @@ public class ApartmentController {
             return jsonMapper.writeValueAsString(new MsgResponse(false, e.getMessage()));
         }
 
+        if (updatedApartmentDto.getAid() == null) {
+            return jsonMapper.writeValueAsString(new MsgResponse(false,
+                    "Do not give the aid of the apartment to be updated!"));
+        }
+
         try {
-            apartmentServiceImpl.updateApartment(aid, updatedApartmentDto);
+            apartmentServiceImpl.updateApartment(updatedApartmentDto.getAid(), updatedApartmentDto);
         }
         catch (Exception e) {
             return jsonMapper.writeValueAsString(new MsgResponse(false, e.getMessage()));
