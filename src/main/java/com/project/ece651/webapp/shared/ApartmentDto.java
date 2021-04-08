@@ -35,7 +35,7 @@ public class ApartmentDto implements Serializable {
     private Timestamp uploadTime;
 
     @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
-    private Date startMonth;
+    private Date startDate;
 
 //    @JsonFormat(pattern="yyyy-MM",timezone = "GMT+8")
 //    private Date endMonth;
@@ -100,12 +100,12 @@ public class ApartmentDto implements Serializable {
         this.uploadTime = uploadTime;
     }
 
-    public Date getStartMonth() {
-        return startMonth;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartMonth(Date startMonth) {
-        this.startMonth = startMonth;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public Integer getTerm() {

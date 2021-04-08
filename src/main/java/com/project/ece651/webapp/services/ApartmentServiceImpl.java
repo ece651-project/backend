@@ -78,8 +78,8 @@ public class ApartmentServiceImpl implements ApartmentService {
             if (updatedApartmentDto.getAddress() != null) {
                 apartmentEntity.setAddress(updatedApartmentDto.getAddress());
             }
-            if (updatedApartmentDto.getStartMonth() != null) {
-                apartmentEntity.setStartMonth(updatedApartmentDto.getStartMonth());
+            if (updatedApartmentDto.getStartDate() != null) {
+                apartmentEntity.setStartDate(updatedApartmentDto.getStartDate());
             }
             if (updatedApartmentDto.getTerm() != null) {
                 apartmentEntity.setTerm(updatedApartmentDto.getTerm());

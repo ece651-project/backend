@@ -17,7 +17,7 @@ public class ApartmentUtils {
         apartmentEntity.setType(apartmentDto.getType());
         apartmentEntity.setVacancy(apartmentDto.getVacancy());
         apartmentEntity.setAddress(apartmentDto.getAddress());
-        apartmentEntity.setStartMonth(apartmentDto.getStartMonth());
+        apartmentEntity.setStartDate(apartmentDto.getStartDate());
         apartmentEntity.setTerm(apartmentDto.getTerm());
         apartmentEntity.setDescription(apartmentDto.getDescription());
         apartmentEntity.setPrice(apartmentDto.getPrice());
@@ -43,7 +43,7 @@ public class ApartmentUtils {
         apartmentDto.setVacancy(apartmentEntity.getVacancy());
         apartmentDto.setAddress(apartmentEntity.getAddress());
         apartmentDto.setUploadTime(apartmentEntity.getUploadTime());
-        apartmentDto.setStartMonth(apartmentEntity.getStartMonth());
+        apartmentDto.setStartDate(apartmentEntity.getStartDate());
         apartmentDto.setTerm(apartmentEntity.getTerm());
         apartmentDto.setDescription(apartmentEntity.getDescription());
         apartmentDto.setPrice(apartmentEntity.getPrice());

@@ -47,7 +47,7 @@ public class ApartmentServiceImplTest {
         apartmentDto.setType(Type.HOUSE);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress("Empty address");
-        apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
+        apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
         apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
@@ -67,7 +67,7 @@ public class ApartmentServiceImplTest {
         apartmentDto.setType(Type.HOUSE);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress("Empty address");
-        apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
+        apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
         apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
@@ -97,7 +97,7 @@ public class ApartmentServiceImplTest {
         apartmentDto.setType(Type.APARTMENT);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
-        apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
+        apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
         apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
@@ -119,7 +119,7 @@ public class ApartmentServiceImplTest {
         apartmentDto.setType(Type.APARTMENT);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
-        apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
+        apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
         apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);
@@ -147,7 +147,7 @@ public class ApartmentServiceImplTest {
         apartmentDto.setType(Type.APARTMENT);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
-        apartmentDto.setStartMonth(DateUtils.calDate(2021, 5, 3));
+        apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
         apartmentDto.setTerm(1);
         apartmentDto.setDescription("Empty description");
         apartmentDto.setPrice(500);

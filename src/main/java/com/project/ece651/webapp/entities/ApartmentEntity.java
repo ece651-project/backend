@@ -45,7 +45,7 @@ public class ApartmentEntity implements Serializable {
     private Timestamp uploadTime;
 
     @Column(nullable=true)
-    private Date startMonth;
+    private Date startDate;
 
 //    @Column
 //    private Date endMonth;
@@ -141,12 +141,12 @@ public class ApartmentEntity implements Serializable {
         this.uploadTime = uploadTime;
     }
 
-    public Date getStartMonth() {
-        return startMonth;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartMonth(Date startMonth) {
-        this.startMonth = startMonth;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public int getTerm() {
