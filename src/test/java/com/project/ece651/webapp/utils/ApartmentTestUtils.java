@@ -7,7 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 public class ApartmentTestUtils {
-    public static final Type DEFAULT_APARTMENT_TYPE = Type.APARTMENT;
+    public static final Type DEFAULT_APARTMENT_TYPE = Type.Apartment;
     public static final String DEFAULT_APARTMENT_ADDRESS = "Default apartment address";
     public static final String DEFAULT_APARTMENT_DESC = "Default apartment description";
     public static final int DEFAULT_APARTMENT_PRICE = 12345;

@@ -1,7 +1,7 @@
 package com.project.ece651.webapp.entities;
 
 public enum Type {
-    APARTMENT, HOUSE;
+    Apartment, House, Studio;
 
     // for conversion to json
     // https://stackoverflow.com/questions/18031125/what-is-the-difference-between-enum-name-and-enum-tostring

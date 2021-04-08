@@ -43,18 +43,24 @@ public class ApartmentController {
     */
     @PostMapping("/add_apt")
     @ResponseStatus(HttpStatus.CREATED)
-    public MsgDto createApartment(@RequestBody ApartmentDto apartmentDto) {
+    public String createApartment(@RequestBody String apartmentJson) throws JsonProcessingException {
         // sample url localhost:8080/apt/add_apt
         // add one new apartment according to the given apartment information
-        MsgDto response = new MsgDto();
+
+        ApartmentDto apartmentDto;
+        try {
+            apartmentDto = jsonMapper.readValue(apartmentJson, ApartmentDto.class);
+        } catch (Exception e) {
+            return jsonMapper.writeValueAsString(new MsgResponse(false, e.getMessage()));
+        }
+
         try {
             apartmentServiceImpl.addApartment(apartmentDto);
         }
         catch (Exception e) {
-            response.setSuccess(false);
-            response.setResponseMsg(e.getMessage());
+            return jsonMapper.writeValueAsString(new MsgResponse(false, e.getMessage()));
         }
-        return response;
+        return jsonMapper.writeValueAsString(new MsgResponse(true, null));
     }
 
     @PutMapping("/update_apt/{aid}")
@@ -63,7 +69,6 @@ public class ApartmentController {
             throws JsonProcessingException {
         // sample url localhost:8080/apt/update_apt/1
         // update apartment according to the given apartment information
-        MsgDto response = new MsgDto();
 
         ApartmentDto updatedApartmentDto;
         try {
@@ -76,10 +81,9 @@ public class ApartmentController {
             apartmentServiceImpl.updateApartment(aid, updatedApartmentDto);
         }
         catch (Exception e) {
-            response.setSuccess(false);
-            response.setResponseMsg(e.getMessage());
+            return jsonMapper.writeValueAsString(new MsgResponse(false, e.getMessage()));
         }
-        return jsonMapper.writeValueAsString(response);
+        return jsonMapper.writeValueAsString(new MsgResponse(true, null));
     }
 
 //    @PutMapping("/update_apt/{aid}")

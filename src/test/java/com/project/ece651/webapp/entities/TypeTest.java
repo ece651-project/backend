@@ -10,7 +10,7 @@ class TypeTest {
 
     @Test
     void testToString() {
-        Type type = Type.APARTMENT;
+        Type type = Type.Apartment;
         assertEquals("Apartment", type.toString());
     }
 }

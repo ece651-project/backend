@@ -9,12 +9,10 @@ import com.project.ece651.webapp.exceptions.UserNotFoundException;
 import com.project.ece651.webapp.repositories.ApartmentRepository;
 import com.project.ece651.webapp.repositories.UserRepository;
 import com.project.ece651.webapp.shared.ApartmentDto;
-import com.project.ece651.webapp.shared.UserDto;
 import com.project.ece651.webapp.utils.DateUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,7 +42,7 @@ public class ApartmentServiceImplTest {
         when(userRepository.findByUid(landlordId)).thenReturn(new UserEntity());
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
-        apartmentDto.setType(Type.HOUSE);
+        apartmentDto.setType(Type.House);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress("Empty address");
         apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
@@ -64,7 +62,7 @@ public class ApartmentServiceImplTest {
         when(userRepository.findByUid(landlordId)).thenReturn(null);
         // given
         ApartmentDto apartmentDto = new ApartmentDto();
-        apartmentDto.setType(Type.HOUSE);
+        apartmentDto.setType(Type.House);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress("Empty address");
         apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
@@ -94,7 +92,7 @@ public class ApartmentServiceImplTest {
         ApartmentDto apartmentDto = new ApartmentDto();
         // apartmentDto.setLandlordId(expectedLandlordId);
         // apartmentDto.setAid(aid);
-        apartmentDto.setType(Type.APARTMENT);
+        apartmentDto.setType(Type.Apartment);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
         apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
@@ -116,7 +114,7 @@ public class ApartmentServiceImplTest {
         ApartmentDto apartmentDto = new ApartmentDto();
         apartmentDto.setLandlordId(expectedLandlordId);
         apartmentDto.setAid(aid);
-        apartmentDto.setType(Type.APARTMENT);
+        apartmentDto.setType(Type.Apartment);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
         apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
@@ -144,7 +142,7 @@ public class ApartmentServiceImplTest {
         ApartmentDto apartmentDto = new ApartmentDto();
         apartmentDto.setLandlordId(expectedLandlordId + "PLACE HOLDER");
         apartmentDto.setAid(aid);
-        apartmentDto.setType(Type.APARTMENT);
+        apartmentDto.setType(Type.Apartment);
         apartmentDto.setVacancy(1);
         apartmentDto.setAddress(null);
         apartmentDto.setStartDate(DateUtils.calDate(2021, 5, 3));
