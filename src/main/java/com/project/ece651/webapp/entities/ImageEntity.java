@@ -28,11 +28,11 @@ public class ImageEntity {
     public ImageEntity (byte[] data) {
         this.data = data;
     }
-//
-//    public ImageEntity (ApartmentEntity apartmentEntity, byte[] data) {
-//        this.apartment = apartmentEntity;
-//        this.data = data;
-//    }
+
+    public ImageEntity (ApartmentEntity apartmentEntity, byte[] data) {
+        this.apartment = apartmentEntity;
+        this.data = data;
+    }
 
     public ImageEntity (String imageType, byte[] data) {
         this.imageType = imageType;

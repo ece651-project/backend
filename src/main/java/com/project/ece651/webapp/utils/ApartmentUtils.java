@@ -52,8 +52,7 @@ public class ApartmentUtils {
         // https://www.baeldung.com/java-base64-image-string
         if (apartmentEntity.getImages() != null && !apartmentEntity.getImages().isEmpty()) {
             Set<String> imageStrings = apartmentEntity.getImages().stream()
-                    .map(image -> Base64.getEncoder().encodeToString((image.getImageType()
-                            + new String(image.getData())).getBytes()))
+                    .map(image -> image.getImageType() + "," + Base64.getEncoder().encodeToString(image.getData()))
                     .collect(Collectors.toSet());
             apartmentDto.setImages(imageStrings);
         }
