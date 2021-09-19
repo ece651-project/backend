@@ -2,50 +2,39 @@
 
 # backend
 
+## 1 Introduction
+
+A house rental web app that allows users to publish, get, and filter rental information and add favorites.
 
 
-## 1 Usage
 
-application URL - http://localhost:8080
+## 2 RESTful APIs
 
-### h2 in-memory database
+**1) User**
 
-http://localhost:8080/h2-console
-JDBC url - jdbc:h2:mem:testdb
-username and password is default
+| Operation                               | HTTP verb | URL                          | upload data                                                  | respond data                                                 |
+| --------------------------------------- | --------- | ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| create user                             | POST      | /user/add_user               | { email:string,	 	nickname:string,	phoneNum:string, Password:string, avatar: string (base64) } | { uid:string, 		success:bool, 		msg:string }     |
+| get user                                | GET       | /user/get_user/{uid}         | /                                                            | { uid:string, 		email:string,				 nickname:string, 		phoneNum:string, 	avatar: string (base64) } |
+| update user                             | PUT       | /user/update_user            | { uid: string, 		email:string,				 nickname:string, 	phoneNum:string, 	Password:string 		avatar: string (base64) } | {success:bool; msg:string}                                   |
+| delete user                             | DELETE    | /user/delete_user/{uid}      | /                                                            | {success:bool; msg:string}                                   |
+| login                                   | POST      | /user/login                  | {email:string; 		password:string}                      | {uid:string, success:bool; msg:string}                       |
+| list all apartments belong to this user | GET       | /user/get_apt/{uid}          | /                                                            | JsonArray of { 		landlordId:id, 		type:int/string? 		address:String 		uploadTime:String, 	startMonth:String, 	endMonth:String, 	description:String, 	images:base64,		price:int } |
+| get favour                              | GET       | /user/get_fav/{uid}          | /                                                            | JsonArray of  		 	 { aid: long }                    |
+| add favour                              | POST      | /user/add_fav                | { uid: string 		 	aid: long }                       | {success:bool; msg:string}                                   |
+| delete favour                           | DELETE    | /user/delete_fav/{uid}/{aid} | /                                                            | {success:bool; msg:string}                                   |
 
-### APIs
 
-#### 1) User
 
-##### create user:
+2) **Apartment**
 
-http://localhost:8080/user/add_user
-
-##### get user:
-
-http://localhost:8080/user/get_user/{uid}
-uid can be found in h2 DB
-
-##### update user:
-
-http://localhost:8080/user/update_user
-
-##### delete user:
-
-http://localhost:8080/user/delete_user/{uid}
-
-##### login:
-
-http://localhost:8080/user/login
-
-#### 2) Apartment
-
-## 2 Implementation
-
-1) UserService extends UserDetailsService for authentication (password encryption...)
-	If you create a new user, then you can see the effect in h2 (only encrypted password).
-2) There is something wrong with login and authentication, so I annotated related code. And code in form-login, form-login-try also have problems.
+| Operation           | HTTP verb | URL                         | upload data                                                  | respond data                                                 |
+| ------------------- | --------- | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| get all apts        | GET       | /apt/get_all                | /                                                            | JsonArray of { 		aid:long, 		landlordId:id, 		type:String, 		vacancy:int, 		address:String 		uploadTime:String, 		startMonth:String, 		term:int,(months) 		description:String, 		images:base64, 	price:int,                     rating: int, 		Comments:[ 		 		 uid:string, 		 		 comment:string, 		 	rating:int]} |
+| get an apt info     | GET       | /apt/get_apt/{aid}          | /                                                            | { aid:long, 		landlordId:id, 		type:String, 		vacancy:int, 		address:String 		uploadTime:String, 		startMonth:String, 		term:int,(months) 		description:String, 		images:base64, 	price:int,                     rating: int, 		Comments:[ 		 		 uid:string, 		 		 comment:string, 		 	rating:int]} |
+| create apartment    | POST      | /apt/add_apt                | {landlordId:id, 	type:String, 		vacancy:int, 		address:String, 	startMonth:String, term:int,(months) description:String, images:base64, price:int} | {success:bool; msg:string}                                   |
+| update an apartment | PUT       | /apt/update_apt/{aid}       | same as create apartment                                     | {success:bool; msg:string}                                   |
+| delete an apartment | DELETE    | /apt/delete_apt/{uid}/{aid} | /                                                            | {success:bool; msg:string}                                   |
 
 
 
@@ -63,8 +52,6 @@ for JSON mapper
 ##### 2) CORS config:
 
 reference: https://spring.io/guides/gs/rest-service-cors/
-
-
 
 #### Project Configuration
 
